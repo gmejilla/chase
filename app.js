@@ -217,7 +217,7 @@ function renderResult(baseRule,queryLabel){
 }
 
 function renderCategories(){
-  const featuredIds=["flights","hotels","chase-travel","ihg","dining","grocery","drugstores","gas","streaming","online-grocery","lyft","target","general"];
+  const featuredIds=["flights","hotels","chase-travel","ihg","dining","grocery","drugstores","gas","streaming","online-grocery","lyft","general"];
   document.getElementById("categoryList").innerHTML=featuredIds.map(id=>{const r=dynamicRecommendation(rules.find(x=>x.id===id)),c=cards[r.winner];return `<div class="category-row" data-rule="${id}" tabindex="0" role="button"><div class="cat-icon">${r.icon}</div><div><div class="cat-title">${r.title}</div><div class="cat-note">${c.short}</div></div><div class="cat-reward"><strong>${r.reward}</strong><span>best card</span></div></div>`}).join("");
 }
 function nextAnnualFeeDate(dateString){
