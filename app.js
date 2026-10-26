@@ -15,9 +15,9 @@ const cards = {
 };
 
 const benefits = [
-  { id:"reserve-dd-15", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash qualifying order", value:15, cadence:"monthly", tracker:"boolean", note:"$15 monthly promo on a qualifying DoorDash order." },
-  { id:"reserve-dd-10a", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash non-restaurant #1", value:10, cadence:"monthly", tracker:"boolean", note:"First $10 monthly non-restaurant DoorDash promo." },
-  { id:"reserve-dd-10b", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash non-restaurant #2", value:10, cadence:"monthly", tracker:"boolean", note:"Second $10 monthly non-restaurant DoorDash promo." },
+  { id:"reserve-dd-15", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash Restaurant Order", value:15, cadence:"monthly", tracker:"boolean", note:"$15 monthly promo on a qualifying DoorDash order." },
+  { id:"reserve-dd-10a", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash Grocery #1", value:10, cadence:"monthly", tracker:"boolean", note:"First $10 monthly non-restaurant DoorDash promo." },
+  { id:"reserve-dd-10b", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash Grocery #2", value:10, cadence:"monthly", tracker:"boolean", note:"Second $10 monthly non-restaurant DoorDash promo." },
   { id:"preferred-dd-10", card:"preferred", icon:DOORDASH_ICON, name:"DoorDash non-restaurant", value:10, cadence:"monthly", tracker:"boolean", note:"$10 monthly non-restaurant DoorDash promo with eligible DashPass." },
   { id:"reserve-edit-1", card:"reserve", icon:"🏨", name:"The Edit credit #1", value:250, cadence:"calendarYear", tracker:"amount", note:"First of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-edit-2", card:"reserve", icon:"🏨", name:"The Edit credit #2", value:250, cadence:"calendarYear", tracker:"amount", note:"Second of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
