@@ -145,27 +145,7 @@ function periodLabel(b){
   return "";
 }
 
-function cardVisual(cardKey){
-  const meta = {
-    reserve: { line1: "SAPPHIRE", line2: "RESERVE", network: "VISA INFINITE", productClass: "product-sapphire" },
-    preferred: { line1: "SAPPHIRE", line2: "PREFERRED", network: "VISA SIGNATURE", productClass: "product-sapphire" },
-    flex: { line1: "FREEDOM", line2: "FLEX", network: "VISA", productClass: "product-freedom" },
-    unlimited: { line1: "FREEDOM", line2: "UNLIMITED", network: "VISA", productClass: "product-freedom" }
-  }[cardKey] || { line1: "CHASE", line2: "CARD", network: "VISA", productClass: "product-generic" };
-  return `<div class="mini-card ${cards[cardKey].className}">
-    <div class="card-sheen"></div>
-    <div class="card-swoosh"></div>
-    <div class="card-topline"></div>
-    <div class="card-header">
-      <div class="chase-lockup" aria-hidden="true"><span class="chase-octagon"></span><span class="chase-word">CHASE</span></div>
-      <div class="product-lockup ${meta.productClass}"><span>${meta.line1}</span><span>${meta.line2}</span></div>
-    </div>
-    <div class="chip"></div>
-    <div class="card-footer">
-      <span class="network">${meta.network}</span>
-    </div>
-  </div>`;
-}
+function cardVisual(cardKey){ const c=cards[cardKey]; return `<div class="mini-card ${c.className}"><span class="brand">CHASE</span><span class="card-name">${c.short.toUpperCase()}</span></div>`; }
 function normalize(value){ return value.toLowerCase().trim().replace(/[^a-z0-9+&' .-]/g,""); }
 function scoreRule(rule,query){ const q=normalize(query); if(!q)return 0; let score=0; for(const alias of rule.aliases){const a=normalize(alias); if(q===a)score=Math.max(score,100); else if(a.startsWith(q))score=Math.max(score,80); else if(a.includes(q))score=Math.max(score,65); else if(q.includes(a))score=Math.max(score,60);} if(normalize(rule.title).includes(q))score=Math.max(score,70); return score; }
 function findBest(query){ const ranked=rules.map(rule=>({rule,score:scoreRule(rule,query)})).sort((a,b)=>b.score-a.score); return ranked[0].score>0?ranked[0].rule:rules.find(r=>r.id==="general"); }
