@@ -9,7 +9,7 @@ const DOORDASH_ICON = `<img src="./assets/doordash-logo.png" alt="DoorDash" clas
 
 const cards = {
   reserve: { name:"Chase Sapphire Reserve", short:"Sapphire Reserve", className:"card-reserve", note:"Premium travel, travel protections, direct flights/hotels, Chase Travel and high-value credits." },
-  preferred: { name:"Chase Sapphire Preferred", short:"Sapphire Preferred", className:"card-preferred", note:"Gas, streaming, online grocery, select travel and a $100 Chase Travel hotel credit." },
+  preferred: { name:"Chase Sapphire Preferred", short:"Sapphire Preferred", className:"card-preferred", note:"Gas, streaming, online grocery, select travel and a $100 Chase Travel Hotel Credit." },
   flex: { name:"Chase Freedom Flex", short:"Freedom Flex", className:"card-flex", note:"Q4 2026: grocery stores, dining and American Red Cross after activation." },
   unlimited: { name:"Chase Freedom Unlimited", short:"Freedom Unlimited", className:"card-unlimited", note:"3% drugstores and a 1.5% catch-all rate for non-bonus purchases." }
 };
@@ -22,12 +22,12 @@ const benefits = [
   { id:"reserve-edit-1", card:"reserve", icon:"🏨", name:"The Edit credit #1", value:250, cadence:"calendarYear", tracker:"amount", note:"First of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-edit-2", card:"reserve", icon:"🏨", name:"The Edit credit #2", value:250, cadence:"calendarYear", tracker:"amount", note:"Second of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-select-hotels", card:"reserve", icon:"🏨", name:"Select Chase Travel Hotels", value:250, cadence:"fixed", tracker:"amount", start:"2026-01-01", end:"2026-12-31", note:"2026 only. Prepaid 2+ night stays at eligible brands including IHG, Montage, Pendry, Omni, Virgin, Minor and Pan Pacific." },
-  { id:"reserve-travel", card:"reserve", icon:"✈️", name:"$300 annual travel credit", value:300, cadence:"anniversary", tracker:"amount", resetSetting:"reserveResetDate", note:"Automatic statement credits on eligible travel purchases. Resets each account anniversary year." },
+  { id:"reserve-travel", card:"reserve", icon:"✈️", name:"$300 Chase Annual Travel Credit", value:300, cadence:"anniversary", tracker:"amount", resetSetting:"reserveResetDate", note:"Automatic statement credits on eligible travel purchases. Resets each account anniversary year." },
   { id:"reserve-stubhub", card:"reserve", icon:STUBHUB_ICON, name:"StubHub / viagogo credit", value:150, cadence:"halfYear", tracker:"amount", note:"Up to $150 in statement credits Jan–Jun and another $150 Jul–Dec, for up to $300 annually. Activation required. Available through Dec. 31, 2027." },
-  { id:"preferred-hotel", card:"preferred", icon:"🏨", name:"$100 Chase Travel hotel credit", value:100, cadence:"anniversary", tracker:"amount", resetSetting:"preferredResetDate", note:"Up to $100 each account anniversary year on eligible hotel stays purchased through Chase Travel." },
+  { id:"preferred-hotel", card:"preferred", icon:"🏨", name:"$100 Chase Travel Hotel Credit", value:100, cadence:"anniversary", tracker:"amount", resetSetting:"preferredResetDate", note:"Up to $100 each account anniversary year on eligible hotel stays purchased through Chase Travel." },
+  { id:"targeted-chase-travel-100", card:"reserve", icon:"✈️", name:"Targeted $100 Chase Travel Offer", value:100, cadence:"targeted", tracker:"boolean", start:"2026-07-01", endSetting:"targetOfferEnd", enabledSetting:"targetOfferEnabled", note:"Targeted Chase Offer: activate first, then spend $600+ in one eligible Chase Travel transaction. The public example offer expired Sep 30, 2026. This tracker defaults to Dec 31, 2026 based on your account-specific terms; edit the date in Settings if needed." }
   { id:"reserve-ttp", card:"reserve", icon:"🛂", name:"Global Entry / TSA PreCheck / NEXUS", value:120, cadence:"interval", tracker:"date", years:4, note:"Up to $120 for one eligible application fee every 4 years." },
   { id:"preferred-ttp", card:"preferred", icon:"🛂", name:"Global Entry / TSA PreCheck / NEXUS", value:120, cadence:"interval", tracker:"date", years:4, note:"Up to $120 for one eligible application fee every 4 years." },
-  { id:"targeted-chase-travel-100", card:"reserve", icon:"🎯", name:"Targeted $100 Chase Travel Offer", value:100, cadence:"targeted", tracker:"boolean", start:"2026-07-01", endSetting:"targetOfferEnd", enabledSetting:"targetOfferEnabled", note:"Targeted Chase Offer: activate first, then spend $600+ in one eligible Chase Travel transaction. The public example offer expired Sep 30, 2026. This tracker defaults to Dec 31, 2026 based on your account-specific terms; edit the date in Settings if needed." }
 ];
 
 const rules = [
