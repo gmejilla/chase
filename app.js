@@ -145,7 +145,20 @@ function periodLabel(b){
   return "";
 }
 
-function cardVisual(cardKey){ const c=cards[cardKey]; return `<div class="mini-card ${c.className}"><span class="brand">CHASE</span><span class="card-name">${c.short.toUpperCase()}</span></div>`; }
+function cardVisual(cardKey){
+  const imageMap = {
+    reserve: { src: "assets/sapphire-reserve-card.png", alt: "Chase Sapphire Reserve card" },
+    preferred: { src: "assets/sapphire-preferred-card.png", alt: "Chase Sapphire Preferred card" },
+    flex: { src: "assets/freedom-flex-card.png", alt: "Chase Freedom Flex card" },
+    unlimited: { src: "assets/freedom-unlimited-card.png", alt: "Chase Freedom Unlimited card" }
+  };
+  const image = imageMap[cardKey];
+  if(image){
+    return `<div class="mini-card image-card"><img src="${image.src}" alt="${image.alt}" loading="lazy" /></div>`;
+  }
+  const c=cards[cardKey];
+  return `<div class="mini-card ${c.className}"><span class="brand">CHASE</span><span class="card-name">${c.short.toUpperCase()}</span></div>`;
+}
 function normalize(value){ return value.toLowerCase().trim().replace(/[^a-z0-9+&' .-]/g,""); }
 function scoreRule(rule,query){ const q=normalize(query); if(!q)return 0; let score=0; for(const alias of rule.aliases){const a=normalize(alias); if(q===a)score=Math.max(score,100); else if(a.startsWith(q))score=Math.max(score,80); else if(a.includes(q))score=Math.max(score,65); else if(q.includes(a))score=Math.max(score,60);} if(normalize(rule.title).includes(q))score=Math.max(score,70); return score; }
 function findBest(query){ const ranked=rules.map(rule=>({rule,score:scoreRule(rule,query)})).sort((a,b)=>b.score-a.score); return ranked[0].score>0?ranked[0].rule:rules.find(r=>r.id==="general"); }
@@ -243,7 +256,7 @@ function renderCredits(){
 function monthlyUsageFor(b,month){ const key=`${today.getFullYear()}-${String(month).padStart(2,"0")}`; const r=state.usage[b.id]?.[key]||{}; if(month>today.getMonth()+1) return "future"; return r.used?"used":"open"; }
 function renderHistory(){
   const monthly=benefits.filter(b=>b.cadence==="monthly"), months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  document.getElementById("historyTable").innerHTML=`<thead><tr><th>Credit</th>${months.map(m=>`<th>${m}</th>`).join("")}</tr></thead><tbody>${monthly.map(b=>`<tr><td>${b.name}</td>${months.map((m,i)=>{const status=monthlyUsageFor(b,i+1);return `<td><span class="history-dot ${status}" title="${m}"></span></td>`}).join("")}</tr>`).join("")}</tbody>`;
+  document.getElementById("historyTable").innerHTML=`<thead><tr><th>Credit</th>${months.map(m=>`<th>${m}</th>`).join("")}</tr></thead><tbody>${monthly.map(b=>`<tr><td><div class="history-credit-name">${b.name}</div><span class="history-card-label ${b.card}">${cards[b.card].short}</span></td>${months.map((m,i)=>{const status=monthlyUsageFor(b,i+1);return `<td><span class="history-dot ${status}" title="${m}"></span></td>`}).join("")}</tr>`).join("")}</tbody>`;
 }
 
 function openCreditDialog(id){
