@@ -3,6 +3,8 @@ const STORAGE_KEY = "chase-card-guide-v2";
 const today = new Date();
 const nowYear = today.getFullYear();
 
+const STUBHUB_ICON = `<img src="./assets/stubhub-logo.png" alt="StubHub" class="brand-mark stubhub-mark">`;
+
 const cards = {
   reserve: { name:"Chase Sapphire Reserve", short:"Sapphire Reserve", className:"card-reserve", note:"Premium travel, travel protections, direct flights/hotels, Chase Travel and high-value credits." },
   preferred: { name:"Chase Sapphire Preferred", short:"Sapphire Preferred", className:"card-preferred", note:"Gas, streaming, online grocery, select travel and a $100 Chase Travel hotel credit." },
@@ -15,10 +17,11 @@ const benefits = [
   { id:"reserve-dd-10a", card:"reserve", icon:"🛍️", name:"DoorDash non-restaurant #1", value:10, cadence:"monthly", tracker:"boolean", note:"First $10 monthly non-restaurant DoorDash promo." },
   { id:"reserve-dd-10b", card:"reserve", icon:"🛍️", name:"DoorDash non-restaurant #2", value:10, cadence:"monthly", tracker:"boolean", note:"Second $10 monthly non-restaurant DoorDash promo." },
   { id:"preferred-dd-10", card:"preferred", icon:"🛍️", name:"DoorDash non-restaurant", value:10, cadence:"monthly", tracker:"boolean", note:"$10 monthly non-restaurant DoorDash promo with eligible DashPass." },
-  { id:"reserve-edit", card:"reserve", icon:"🏨", name:"The Edit hotel credits", value:500, cadence:"calendarYear", tracker:"amount", note:"Up to $500 annually; maximum $250 statement credit per qualifying prepaid booking; 2-night minimum." },
+  { id:"reserve-edit-1", card:"reserve", icon:"🏨", name:"The Edit credit #1", value:250, cadence:"calendarYear", tracker:"amount", note:"First of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
+  { id:"reserve-edit-2", card:"reserve", icon:"🏨", name:"The Edit credit #2", value:250, cadence:"calendarYear", tracker:"amount", note:"Second of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-select-hotels", card:"reserve", icon:"🏨", name:"Select Chase Travel Hotels", value:250, cadence:"fixed", tracker:"amount", start:"2026-01-01", end:"2026-12-31", note:"2026 only. Prepaid 2+ night stays at eligible brands including IHG, Montage, Pendry, Omni, Virgin, Minor and Pan Pacific." },
   { id:"reserve-travel", card:"reserve", icon:"✈️", name:"$300 annual travel credit", value:300, cadence:"anniversary", tracker:"amount", resetSetting:"reserveResetDate", note:"Automatic statement credits on eligible travel purchases. Resets each account anniversary year." },
-  { id:"reserve-stubhub", card:"reserve", icon:"🎟️", name:"StubHub / viagogo credit", value:150, cadence:"halfYear", tracker:"amount", note:"Up to $150 in statement credits Jan–Jun and another $150 Jul–Dec, for up to $300 annually. Activation required. Available through Dec. 31, 2027." },
+  { id:"reserve-stubhub", card:"reserve", icon:STUBHUB_ICON, name:"StubHub / viagogo credit", value:150, cadence:"halfYear", tracker:"amount", note:"Up to $150 in statement credits Jan–Jun and another $150 Jul–Dec, for up to $300 annually. Activation required. Available through Dec. 31, 2027." },
   { id:"preferred-hotel", card:"preferred", icon:"🏨", name:"$100 Chase Travel hotel credit", value:100, cadence:"anniversary", tracker:"amount", resetSetting:"preferredResetDate", note:"Up to $100 each account anniversary year on eligible hotel stays purchased through Chase Travel." },
   { id:"reserve-ttp", card:"reserve", icon:"🛂", name:"Global Entry / TSA PreCheck / NEXUS", value:120, cadence:"interval", tracker:"date", years:4, note:"Up to $120 for one eligible application fee every 4 years." },
   { id:"preferred-ttp", card:"preferred", icon:"🛂", name:"Global Entry / TSA PreCheck / NEXUS", value:120, cadence:"interval", tracker:"date", years:4, note:"Up to $120 for one eligible application fee every 4 years." },
@@ -27,12 +30,12 @@ const benefits = [
 
 const rules = [
   { id:"doordash", icon:"🛍️", title:"DoorDash", aliases:["doordash","door dash"], winner:"reserve", reward:"Use credits first", why:"Unused monthly DoorDash credits can beat the normal points return.", alternative:"After credits are used, Q4 restaurant orders can favor Freedom Flex at 7% total.", benefitIds:["reserve-dd-15","reserve-dd-10a","reserve-dd-10b","preferred-dd-10"] },
-  { id:"stubhub", icon:"🎟️", title:"StubHub / viagogo", aliases:["stubhub","stub hub","viagogo","tickets","event tickets","concert tickets"], winner:"reserve", reward:"Up to $150 credit", why:"Reserve provides up to $150 in StubHub/viagogo statement credits each half-year after activation.", alternative:"The benefit resets Jan 1 and Jul 1, for up to $300 per calendar year.", benefitIds:["reserve-stubhub"] },
+  { id:"stubhub", icon:STUBHUB_ICON, title:"StubHub / viagogo", aliases:["stubhub","stub hub","viagogo","tickets","event tickets","concert tickets"], winner:"reserve", reward:"Up to $150 credit", why:"Reserve provides up to $150 in StubHub/viagogo statement credits each half-year after activation.", alternative:"The benefit resets Jan 1 and Jul 1, for up to $300 per calendar year.", benefitIds:["reserve-stubhub"] },
   { id:"flights", icon:"✈️", title:"Flights", aliases:["flight","flights","airline","airfare","american airlines","aa","united airlines","delta","jetblue","southwest"], winner:"reserve", reward:"4x points", why:"Best for flights booked directly with the airline.", alternative:"Use Reserve through Chase Travel for 8x when portal pricing works for you.", benefitIds:["reserve-travel","targeted-chase-travel-100"] },
-  { id:"ihg", icon:"🏨", title:"IHG / Select Hotels", aliases:["ihg","intercontinental","holiday inn","kimpton","crowne plaza","montage","pendry","omni","virgin hotel","minor hotel","pan pacific"], winner:"reserve", reward:"Up to $250 credit", why:"Eligible prepaid 2+ night Chase Travel stays can use the 2026 Select Chase Travel Hotels credit.", alternative:"If the property is also in The Edit, additional Reserve hotel value may apply.", benefitIds:["reserve-select-hotels","reserve-edit","reserve-travel","targeted-chase-travel-100"] },
-  { id:"the-edit", icon:"👑", title:"The Edit", aliases:["the edit","edit hotel","edit hotels"], winner:"reserve", reward:"Up to $500 credit", why:"Reserve gets up to $500 annually for qualifying prepaid The Edit bookings, max $250 credit per transaction.", alternative:"Eligible stays also include The Edit on-property benefits such as a $100 property credit.", benefitIds:["reserve-edit","reserve-travel","targeted-chase-travel-100"] },
-  { id:"hotels", icon:"🏨", title:"Hotels", aliases:["hotel","hotels","marriott","hilton","hyatt"], winner:"reserve", reward:"4x points", why:"Best for hotels booked directly with the hotel.", alternative:"Before booking, compare Chase Travel because unused Reserve or Preferred hotel credits can be more valuable than points.", benefitIds:["reserve-edit","reserve-select-hotels","reserve-travel","preferred-hotel","targeted-chase-travel-100"] },
-  { id:"chase-travel", icon:"🧳", title:"Chase Travel", aliases:["chase travel","travel portal","chase portal"], winner:"reserve", reward:"8x points", why:"Reserve earns 8x on Chase Travel bookings.", alternative:"Unused travel and hotel credits may make the effective return much higher.", benefitIds:["reserve-edit","reserve-select-hotels","reserve-travel","preferred-hotel","targeted-chase-travel-100"] },
+  { id:"ihg", icon:"🏨", title:"IHG / Select Hotels", aliases:["ihg","intercontinental","holiday inn","kimpton","crowne plaza","montage","pendry","omni","virgin hotel","minor hotel","pan pacific"], winner:"reserve", reward:"Up to $250 credit", why:"Eligible prepaid 2+ night Chase Travel stays can use the 2026 Select Chase Travel Hotels credit.", alternative:"If the property is also in The Edit, additional Reserve hotel value may apply.", benefitIds:["reserve-select-hotels","reserve-edit-1","reserve-edit-2","reserve-travel","targeted-chase-travel-100"] },
+  { id:"the-edit", icon:"👑", title:"The Edit", aliases:["the edit","edit hotel","edit hotels"], winner:"reserve", reward:"Up to $500 credit", why:"Reserve gets up to $500 annually for qualifying prepaid The Edit bookings, max $250 credit per transaction.", alternative:"Eligible stays also include The Edit on-property benefits such as a $100 property credit.", benefitIds:["reserve-edit-1","reserve-edit-2","reserve-travel","targeted-chase-travel-100"] },
+  { id:"hotels", icon:"🏨", title:"Hotels", aliases:["hotel","hotels","marriott","hilton","hyatt"], winner:"reserve", reward:"4x points", why:"Best for hotels booked directly with the hotel.", alternative:"Before booking, compare Chase Travel because unused Reserve or Preferred hotel credits can be more valuable than points.", benefitIds:["reserve-edit-1","reserve-edit-2","reserve-select-hotels","reserve-travel","preferred-hotel","targeted-chase-travel-100"] },
+  { id:"chase-travel", icon:"🧳", title:"Chase Travel", aliases:["chase travel","travel portal","chase portal"], winner:"reserve", reward:"8x points", why:"Reserve earns 8x on Chase Travel bookings.", alternative:"Unused travel and hotel credits may make the effective return much higher.", benefitIds:["reserve-edit-1","reserve-edit-2","reserve-select-hotels","reserve-travel","preferred-hotel","targeted-chase-travel-100"] },
   { id:"rental-cars", icon:"🚙", title:"Rental Cars", aliases:["rental car","rental cars","hertz","avis","budget","enterprise","national","alamo","sixt"], winner:"reserve", reward:"8x via Chase Travel", why:"Reserve earns 8x when the rental car is booked through Chase Travel.", alternative:"For a direct rental-car booking, Preferred earns 2x on general travel; Reserve may still be preferable when its travel protections matter more.", benefitIds:["reserve-travel","targeted-chase-travel-100"] },
   { id:"dining", icon:"🍽️", title:"Restaurants / Dining", aliases:["restaurant","restaurants","dining","takeout","food delivery","mcdonalds","mcdonald's","chipotle","starbucks","wendys","wendy's","burger king","ubereats","uber eats","grubhub"], winner:"flex", reward:"7% total", why:"Q4 2026 dining stacks the Flex quarterly bonus with its normal dining earnings.", alternative:"Reserve and Preferred earn 3x dining outside the Q4 Flex bonus cap." },
   { id:"grocery", icon:"🛒", title:"Grocery Stores", aliases:["grocery","groceries","supermarket","wegmans","shoprite","shop rite","acme","aldi","lidl","trader joes","trader joe's","whole foods","sprouts"], winner:"flex", reward:"5%", why:"Q4 2026 Freedom Flex grocery bonus after activation.", alternative:"Walmart, Target, warehouse clubs and some mixed merchants are excluded." },
@@ -66,8 +69,24 @@ let activeCreditFilter = "all";
 let editingBenefitId = null;
 
 function loadState(){
-  try { const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)); return raw && raw.version===APP_VERSION ? {...defaultState,...raw,settings:{...defaultState.settings,...raw.settings},usage:raw.usage||{}} : structuredClone(defaultState); }
-  catch { return structuredClone(defaultState); }
+  try {
+    const raw=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(!(raw && raw.version===APP_VERSION)) return structuredClone(defaultState);
+    const next={...defaultState,...raw,settings:{...defaultState.settings,...raw.settings},usage:raw.usage||{}};
+    // Migrate the legacy single $500 The Edit tracker into two $250 portions.
+    if(next.usage["reserve-edit"]){
+      for(const [period,record] of Object.entries(next.usage["reserve-edit"])){
+        const amount=Math.max(0,Number(record?.amount)||0);
+        next.usage["reserve-edit-1"]=next.usage["reserve-edit-1"]||{};
+        next.usage["reserve-edit-2"]=next.usage["reserve-edit-2"]||{};
+        if(!next.usage["reserve-edit-1"][period]) next.usage["reserve-edit-1"][period]={amount:Math.min(250,amount),updated:record?.updated||Date.now()};
+        if(!next.usage["reserve-edit-2"][period]) next.usage["reserve-edit-2"][period]={amount:Math.min(250,Math.max(0,amount-250)),updated:record?.updated||Date.now()};
+      }
+      delete next.usage["reserve-edit"];
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(next));
+    }
+    return next;
+  } catch { return structuredClone(defaultState); }
 }
 function saveState(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
 function isoDate(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
