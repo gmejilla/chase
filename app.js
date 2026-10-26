@@ -51,7 +51,14 @@ const rules = [
 ];
 
 const quickSearches = ["DoorDash","IHG","The Edit","Target","Costco","CVS","Restaurants","Groceries","Gas","Hotels"];
-const defaultState = { version:APP_VERSION, settings:{ reserveResetDate:"", preferredResetDate:"", targetOfferEnabled:true, targetOfferEnd:"2026-12-31" }, usage:{} };
+const defaultState = { version:APP_VERSION, settings:{
+  reserveResetDate:"",
+  preferredResetDate:"",
+  reserveAnnualFeeDate:"",
+  preferredAnnualFeeDate:"",
+  targetOfferEnabled:true,
+  targetOfferEnd:"2026-12-31"
+}, usage:{} };
 let state = loadState();
 let activeCreditFilter = "all";
 let editingBenefitId = null;
@@ -138,7 +145,27 @@ function periodLabel(b){
   return "";
 }
 
-function cardVisual(cardKey){ const c=cards[cardKey]; return `<div class="mini-card ${c.className}"><span class="brand">CHASE</span><span class="card-name">${c.short.toUpperCase()}</span></div>`; }
+function cardVisual(cardKey){
+  const meta = {
+    reserve: { line1: "SAPPHIRE", line2: "RESERVE", network: "VISA INFINITE", productClass: "product-sapphire" },
+    preferred: { line1: "SAPPHIRE", line2: "PREFERRED", network: "VISA SIGNATURE", productClass: "product-sapphire" },
+    flex: { line1: "FREEDOM", line2: "FLEX", network: "VISA", productClass: "product-freedom" },
+    unlimited: { line1: "FREEDOM", line2: "UNLIMITED", network: "VISA", productClass: "product-freedom" }
+  }[cardKey] || { line1: "CHASE", line2: "CARD", network: "VISA", productClass: "product-generic" };
+  return `<div class="mini-card ${cards[cardKey].className}">
+    <div class="card-sheen"></div>
+    <div class="card-swoosh"></div>
+    <div class="card-topline"></div>
+    <div class="card-header">
+      <div class="chase-lockup" aria-hidden="true"><span class="chase-octagon"></span><span class="chase-word">CHASE</span></div>
+      <div class="product-lockup ${meta.productClass}"><span>${meta.line1}</span><span>${meta.line2}</span></div>
+    </div>
+    <div class="chip"></div>
+    <div class="card-footer">
+      <span class="network">${meta.network}</span>
+    </div>
+  </div>`;
+}
 function normalize(value){ return value.toLowerCase().trim().replace(/[^a-z0-9+&' .-]/g,""); }
 function scoreRule(rule,query){ const q=normalize(query); if(!q)return 0; let score=0; for(const alias of rule.aliases){const a=normalize(alias); if(q===a)score=Math.max(score,100); else if(a.startsWith(q))score=Math.max(score,80); else if(a.includes(q))score=Math.max(score,65); else if(q.includes(a))score=Math.max(score,60);} if(normalize(rule.title).includes(q))score=Math.max(score,70); return score; }
 function findBest(query){ const ranked=rules.map(rule=>({rule,score:scoreRule(rule,query)})).sort((a,b)=>b.score-a.score); return ranked[0].score>0?ranked[0].rule:rules.find(r=>r.id==="general"); }
@@ -175,7 +202,22 @@ function renderCategories(){
   const featuredIds=["flights","hotels","chase-travel","ihg","dining","grocery","drugstores","gas","streaming","online-grocery","lyft","target","general"];
   document.getElementById("categoryList").innerHTML=featuredIds.map(id=>{const r=dynamicRecommendation(rules.find(x=>x.id===id)),c=cards[r.winner];return `<div class="category-row" data-rule="${id}" tabindex="0" role="button"><div class="cat-icon">${r.icon}</div><div><div class="cat-title">${r.title}</div><div class="cat-note">${c.short}</div></div><div class="cat-reward"><strong>${r.reward}</strong><span>best card</span></div></div>`}).join("");
 }
-function renderCards(){ document.getElementById("cardsGrid").innerHTML=Object.entries(cards).map(([key,c])=>`<div class="card-tile" data-card="${key}">${cardVisual(key)}<div class="card-tile-name">${c.short}</div><div class="card-tile-note">${c.note}</div></div>`).join(""); }
+function nextAnnualFeeDate(dateString){
+  const base=parseLocalDate(dateString);
+  if(!base) return null;
+  let next=new Date(today.getFullYear(),base.getMonth(),base.getDate());
+  if(next<new Date(today.getFullYear(),today.getMonth(),today.getDate())) next=new Date(today.getFullYear()+1,base.getMonth(),base.getDate());
+  return next;
+}
+function annualFeeMeta(cardKey){
+  const settingKey=cardKey==="reserve"?"reserveAnnualFeeDate":cardKey==="preferred"?"preferredAnnualFeeDate":null;
+  if(!settingKey) return "";
+  const next=nextAnnualFeeDate(state.settings[settingKey]);
+  if(!next) return `<div class="card-fee-date muted">Annual fee date not set</div>`;
+  const days=Math.max(0,daysBetween(today,next));
+  return `<div class="card-fee-date"><strong>Annual fee:</strong> ${fmtDate(next)} <span>· ${days} day${days===1?"":"s"}</span></div>`;
+}
+function renderCards(){ document.getElementById("cardsGrid").innerHTML=Object.entries(cards).map(([key,c])=>`<div class="card-tile" data-card="${key}">${cardVisual(key)}<div class="card-tile-name">${c.short}</div><div class="card-tile-note">${c.note}</div>${annualFeeMeta(key)}</div>`).join(""); }
 function renderChips(){ document.getElementById("quickChips").innerHTML=quickSearches.map(x=>`<button class="chip" data-query="${x}">${x}</button>`).join(""); }
 function showCardWinners(cardKey){ const wins=rules.filter(r=>dynamicRecommendation(r).winner===cardKey).slice(0,8),c=cards[cardKey],el=document.getElementById("cardDetail"); el.innerHTML=`<div class="result-card"><div class="result-kicker">Where this card wins</div><h2 class="result-title">${c.short}</h2><p class="result-subtitle">${c.note}</p>${wins.map(r=>`<div class="alt-row"><span>${r.icon} ${r.title}</span><strong>${dynamicRecommendation(r).reward}</strong></div>`).join("")}</div>`; el.classList.remove("hidden"); el.scrollIntoView({behavior:"smooth",block:"nearest"}); }
 
@@ -242,25 +284,29 @@ function saveCreditDialog(){
   if(b.tracker==="boolean") state.usage[b.id][p.key]={used:document.getElementById("creditUsedInput").checked,updated:Date.now()};
   if(b.tracker==="amount") state.usage[b.id][p.key]={amount:Math.max(0,Math.min(b.value,Number(document.getElementById("creditAmountInput").value)||0)),updated:Date.now()};
   if(b.tracker==="date") state.usage[b.id][p.key]={date:document.getElementById("creditDateInput").value,updated:Date.now()};
-  saveState(); renderCredits();
+  saveState(); renderCredits(); renderCards();
 }
 function clearCreditDialog(){ const b=benefits.find(x=>x.id===editingBenefitId); if(!b)return; const p=benefitPeriod(b); if(state.usage[b.id]) delete state.usage[b.id][p.key]; saveState(); renderCredits(); document.getElementById("creditDialog").close(); }
 
 function syncSettingsUI(){
   document.getElementById("reserveResetDate").value=state.settings.reserveResetDate||"";
   document.getElementById("preferredResetDate").value=state.settings.preferredResetDate||"";
+  document.getElementById("reserveAnnualFeeDate").value=state.settings.reserveAnnualFeeDate||"";
+  document.getElementById("preferredAnnualFeeDate").value=state.settings.preferredAnnualFeeDate||"";
   document.getElementById("targetOfferEnabled").checked=!!state.settings.targetOfferEnabled;
   document.getElementById("targetOfferEnd").value=state.settings.targetOfferEnd||"2026-12-31";
 }
 function settingChanged(){
   state.settings.reserveResetDate=document.getElementById("reserveResetDate").value;
   state.settings.preferredResetDate=document.getElementById("preferredResetDate").value;
+  state.settings.reserveAnnualFeeDate=document.getElementById("reserveAnnualFeeDate").value;
+  state.settings.preferredAnnualFeeDate=document.getElementById("preferredAnnualFeeDate").value;
   state.settings.targetOfferEnabled=document.getElementById("targetOfferEnabled").checked;
   state.settings.targetOfferEnd=document.getElementById("targetOfferEnd").value||"2026-12-31";
-  saveState(); renderCredits();
+  saveState(); renderCredits(); renderCards();
 }
 function exportBackup(){ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob),a=document.createElement("a"); a.href=url; a.download=`chase-card-guide-backup-${isoDate(today)}.json`; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); }
-async function importBackup(file){ try{ const parsed=JSON.parse(await file.text()); if(parsed.version!==APP_VERSION) throw new Error("Unsupported backup version"); state={...defaultState,...parsed,settings:{...defaultState.settings,...parsed.settings},usage:parsed.usage||{}}; saveState(); syncSettingsUI(); renderCredits(); alert("Backup imported."); } catch(e){ alert("Could not import that backup file."); } }
+async function importBackup(file){ try{ const parsed=JSON.parse(await file.text()); if(parsed.version!==APP_VERSION) throw new Error("Unsupported backup version"); state={...defaultState,...parsed,settings:{...defaultState.settings,...parsed.settings},usage:parsed.usage||{}}; saveState(); syncSettingsUI(); renderCredits(); renderCards(); alert("Backup imported."); } catch(e){ alert("Could not import that backup file."); } }
 
 function switchTab(tab){ document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.dataset.view===tab)); document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab)); if(tab==="credits")renderCredits(); if(tab==="settings")syncSettingsUI(); window.scrollTo({top:0,behavior:"smooth"}); }
 
@@ -281,10 +327,10 @@ document.addEventListener("keydown",e=>{const row=e.target.closest?.("[data-rule
 
 document.getElementById("creditForm").addEventListener("submit",saveCreditDialog);
 document.getElementById("creditClearBtn").addEventListener("click",clearCreditDialog);
-["reserveResetDate","preferredResetDate","targetOfferEnabled","targetOfferEnd"].forEach(id=>document.getElementById(id).addEventListener("change",settingChanged));
+["reserveResetDate","preferredResetDate","reserveAnnualFeeDate","preferredAnnualFeeDate","targetOfferEnabled","targetOfferEnd"].forEach(id=>document.getElementById(id).addEventListener("change",settingChanged));
 document.getElementById("exportBtn").addEventListener("click",exportBackup);
 document.getElementById("importInput").addEventListener("change",e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value="";});
-document.getElementById("resetBtn").addEventListener("click",()=>{if(confirm("Reset all credit tracking and settings?")){state=structuredClone(defaultState);saveState();syncSettingsUI();renderCredits();}});
+document.getElementById("resetBtn").addEventListener("click",()=>{if(confirm("Reset all credit tracking and settings?")){state=structuredClone(defaultState);saveState();syncSettingsUI();renderCredits();renderCards();}});
 
 const infoDialog=document.getElementById("infoDialog");
 document.getElementById("infoBtn").addEventListener("click",()=>infoDialog.showModal());
