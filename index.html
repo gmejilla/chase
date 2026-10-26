@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Card Guide" />
+  <meta name="description" content="Find the best Chase card to use by store or purchase category." />
+  <title>Chase Card Guide</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>Chase Card Guide</h1>
+        <p class="subtitle">Reserve • Preferred • Freedom Flex • Freedom Unlimited</p>
+      </div>
+      <button class="icon-button" id="infoBtn" aria-label="About this app">i</button>
+    </header>
+
+    <main>
+      <section class="hero-search" aria-labelledby="searchTitle">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+          <input id="searchInput" type="search" inputmode="search" autocomplete="off" spellcheck="false" placeholder="Search store or category…" aria-label="Search a store or category" />
+          <button id="clearSearch" class="clear-button" aria-label="Clear search">×</button>
+        </div>
+        <div class="quick-chips" id="quickChips" aria-label="Popular searches"></div>
+      </section>
+
+      <section id="recommendation" class="recommendation hidden" aria-live="polite"></section>
+
+      <section class="section-block">
+        <div class="section-heading-row">
+          <div>
+            <h2>Best card by category</h2>
+            <p>Optimized for your four-card setup.</p>
+          </div>
+          <span class="pill">Q4 2026</span>
+        </div>
+        <div id="categoryList" class="category-list"></div>
+      </section>
+
+      <section class="quarter-card">
+        <div class="quarter-title-row">
+          <div>
+            <h2>Current bonus categories</h2>
+            <p>Freedom Flex • Oct 1–Dec 31, 2026</p>
+          </div>
+          <span class="activation-dot">Activated?</span>
+        </div>
+        <div class="bonus-grid">
+          <div class="bonus-item grocery"><div class="bonus-emoji">🛒</div><strong>Grocery Stores</strong><span>5%</span></div>
+          <div class="bonus-item dining"><div class="bonus-emoji">🍽️</div><strong>Dining</strong><span>7% total</span></div>
+          <div class="bonus-item charity"><div class="bonus-emoji">♥</div><strong>Red Cross</strong><span>5%</span></div>
+        </div>
+        <div class="cap-row">
+          <span>$1,500 combined quarterly cap</span>
+          <span>Activate by Dec 14</span>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading-row">
+          <div>
+            <h2>My cards</h2>
+            <p>Tap a card to see where it wins.</p>
+          </div>
+        </div>
+        <div id="cardsGrid" class="cards-grid"></div>
+      </section>
+
+      <section class="disclaimer-card">
+        <strong>Merchant coding matters.</strong>
+        <p>Rewards are based on how the merchant codes the purchase. A store can sell groceries without coding as a grocery store. Always verify Chase terms for unusual merchants.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Updated for Q4 2026</span>
+      <span>Static app • GitHub Pages ready</span>
+    </footer>
+  </div>
+
+  <dialog id="infoDialog">
+    <div class="dialog-inner">
+      <div class="dialog-title-row"><h2>About this guide</h2><button id="closeDialog" class="icon-button">×</button></div>
+      <p>This app ranks your Chase Sapphire Reserve, Sapphire Preferred, Freedom Flex, and Freedom Unlimited using the earning rates and Q4 2026 rotating categories built into this version.</p>
+      <p>For stores, the app uses a local merchant-to-category lookup. If a store is not recognized, search the purchase category instead.</p>
+      <p>No account data is stored or transmitted.</p>
+    </div>
+  </dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
