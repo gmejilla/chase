@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Card Guide" />
-  <meta name="description" content="Find the best Chase card to use by store or purchase category." />
+  <meta name="description" content="Choose the best Chase card and track Sapphire credits." />
   <title>Chase Card Guide</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
@@ -18,81 +18,145 @@
     <header class="topbar">
       <div>
         <h1>Chase Card Guide</h1>
-        <p class="subtitle">Reserve • Preferred • Freedom Flex • Freedom Unlimited</p>
+        <p class="subtitle">Best-card recommender + credit tracker</p>
       </div>
       <button class="icon-button" id="infoBtn" aria-label="About this app">i</button>
     </header>
 
     <main>
-      <section class="hero-search" aria-labelledby="searchTitle">
-        <div class="search-wrap">
-          <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
-          <input id="searchInput" type="search" inputmode="search" autocomplete="off" spellcheck="false" placeholder="Search store or category…" aria-label="Search a store or category" />
-          <button id="clearSearch" class="clear-button" aria-label="Clear search">×</button>
-        </div>
-        <div class="quick-chips" id="quickChips" aria-label="Popular searches"></div>
-      </section>
-
-      <section id="recommendation" class="recommendation hidden" aria-live="polite"></section>
-
-      <section class="section-block">
-        <div class="section-heading-row">
-          <div>
-            <h2>Best card by category</h2>
-            <p>Optimized for your four-card setup.</p>
+      <section class="view active" id="view-best" data-view="best">
+        <section class="hero-search" aria-label="Card search">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+            <input id="searchInput" type="search" inputmode="search" autocomplete="off" spellcheck="false" placeholder="Search store or category…" aria-label="Search a store or category" />
+            <button id="clearSearch" class="clear-button" aria-label="Clear search">×</button>
           </div>
-          <span class="pill">Q4 2026</span>
-        </div>
-        <div id="categoryList" class="category-list"></div>
-      </section>
+          <div class="quick-chips" id="quickChips" aria-label="Popular searches"></div>
+        </section>
 
-      <section class="quarter-card">
-        <div class="quarter-title-row">
-          <div>
-            <h2>Current bonus categories</h2>
-            <p>Freedom Flex • Oct 1–Dec 31, 2026</p>
+        <section id="recommendation" class="recommendation hidden" aria-live="polite"></section>
+
+        <section class="section-block">
+          <div class="section-heading-row">
+            <div>
+              <h2>Best card by category</h2>
+              <p>Optimized for your four-card setup.</p>
+            </div>
+            <span class="pill">Q4 2026</span>
           </div>
-          <span class="activation-dot">Activated?</span>
-        </div>
-        <div class="bonus-grid">
-          <div class="bonus-item grocery"><div class="bonus-emoji">🛒</div><strong>Grocery Stores</strong><span>5%</span></div>
-          <div class="bonus-item dining"><div class="bonus-emoji">🍽️</div><strong>Dining</strong><span>7% total</span></div>
-          <div class="bonus-item charity"><div class="bonus-emoji">♥</div><strong>Red Cross</strong><span>5%</span></div>
-        </div>
-        <div class="cap-row">
-          <span>$1,500 combined quarterly cap</span>
-          <span>Activate by Dec 14</span>
-        </div>
-      </section>
+          <div id="categoryList" class="category-list"></div>
+        </section>
 
-      <section class="section-block">
-        <div class="section-heading-row">
-          <div>
-            <h2>My cards</h2>
-            <p>Tap a card to see where it wins.</p>
+        <section class="quarter-card">
+          <div class="quarter-title-row">
+            <div>
+              <h2>Current bonus categories</h2>
+              <p>Freedom Flex • Oct 1–Dec 31, 2026</p>
+            </div>
+            <span class="activation-dot">Activate by Dec 14</span>
           </div>
-        </div>
-        <div id="cardsGrid" class="cards-grid"></div>
+          <div class="bonus-grid">
+            <div class="bonus-item grocery"><div class="bonus-emoji">🛒</div><strong>Grocery Stores</strong><span>5%</span></div>
+            <div class="bonus-item dining"><div class="bonus-emoji">🍽️</div><strong>Dining</strong><span>7% total</span></div>
+            <div class="bonus-item charity"><div class="bonus-emoji">♥</div><strong>Red Cross</strong><span>5%</span></div>
+          </div>
+          <div class="cap-row"><span>$1,500 combined quarterly cap</span><span>Walmart & Target excluded from grocery</span></div>
+        </section>
       </section>
 
-      <section class="disclaimer-card">
-        <strong>Merchant coding matters.</strong>
-        <p>Rewards are based on how the merchant codes the purchase. A store can sell groceries without coding as a grocery store. Always verify Chase terms for unusual merchants.</p>
+      <section class="view" id="view-credits" data-view="credits">
+        <div class="credits-hero">
+          <div>
+            <div class="eyebrow">Credits tracker</div>
+            <h2>Use the value you already have</h2>
+            <p>Tap a credit to record usage. Everything stays on this device.</p>
+          </div>
+          <div class="year-chip" id="creditsYear">2026</div>
+        </div>
+
+        <div class="summary-grid" id="summaryGrid"></div>
+
+        <section class="section-block">
+          <div class="section-heading-row">
+            <div><h2>Use these next</h2><p>Open credits sorted by urgency.</p></div>
+          </div>
+          <div id="urgentCredits" class="credit-list"></div>
+        </section>
+
+        <section class="section-block">
+          <div class="segmented" id="creditFilters" role="group" aria-label="Filter credits">
+            <button class="segment active" data-credit-filter="all">All</button>
+            <button class="segment" data-credit-filter="reserve">Reserve</button>
+            <button class="segment" data-credit-filter="preferred">Preferred</button>
+          </div>
+          <div id="creditsList" class="credit-list"></div>
+        </section>
+
+        <details class="history-card">
+          <summary>2026 monthly credit history</summary>
+          <div class="history-scroll"><table id="historyTable" class="history-table"></table></div>
+        </details>
+      </section>
+
+      <section class="view" id="view-cards" data-view="cards">
+        <section class="section-block no-top">
+          <div class="section-heading-row">
+            <div><h2>My cards</h2><p>Tap a card to see where it wins.</p></div>
+          </div>
+          <div id="cardsGrid" class="cards-grid"></div>
+        </section>
+        <section id="cardDetail" class="recommendation hidden" aria-live="polite"></section>
+        <section class="disclaimer-card"><strong>Merchant coding matters.</strong><p>A store can sell groceries without coding as a grocery store. Always verify Chase terms for unusual merchants and targeted Chase Offers.</p></section>
+      </section>
+
+      <section class="view" id="view-settings" data-view="settings">
+        <section class="settings-card">
+          <h2>Credit reset dates</h2>
+          <p class="settings-intro">Set the dates shown in your Chase account. The app uses them to calculate each benefit period.</p>
+          <label class="field"><span>Reserve $300 travel credit reset date</span><input type="date" id="reserveResetDate" /></label>
+          <label class="field"><span>Preferred $100 hotel credit reset date</span><input type="date" id="preferredResetDate" /></label>
+        </section>
+
+        <section class="settings-card">
+          <h2>Targeted $100 Chase Travel Offer</h2>
+          <p class="settings-intro">The linked 2026 promotion required activation and a single $600+ Chase Travel transaction. The public article describes a version that expired Sep. 30, 2026; your tracker defaults to Dec. 31, 2026 based on the account-specific terms you provided. Change the date if the offer shown in your Chase account is different.</p>
+          <label class="toggle-row"><span><strong>Track this targeted offer</strong><small>Turn off if it was never added to your card.</small></span><input type="checkbox" id="targetOfferEnabled" /></label>
+          <label class="field"><span>Offer expiration date</span><input type="date" id="targetOfferEnd" /></label>
+        </section>
+
+        <section class="settings-card">
+          <h2>Backup & restore</h2>
+          <div class="settings-actions">
+            <button class="primary-button" id="exportBtn">Export backup</button>
+            <label class="secondary-button file-button">Import backup<input type="file" id="importInput" accept="application/json" /></label>
+          </div>
+          <button class="danger-button" id="resetBtn">Reset all tracking data</button>
+        </section>
       </section>
     </main>
 
-    <footer class="footer">
-      <span>Updated for Q4 2026</span>
-      <span>Static app • GitHub Pages ready</span>
-    </footer>
+    <nav class="bottom-nav" aria-label="Primary">
+      <button class="nav-item active" data-tab="best"><span>⌕</span><small>Best Card</small></button>
+      <button class="nav-item" data-tab="credits"><span>◉</span><small>Credits</small></button>
+      <button class="nav-item" data-tab="cards"><span>▣</span><small>Cards</small></button>
+      <button class="nav-item" data-tab="settings"><span>⚙</span><small>Settings</small></button>
+    </nav>
   </div>
+
+  <dialog id="creditDialog">
+    <form method="dialog" class="dialog-inner" id="creditForm">
+      <div class="dialog-title-row"><div><div class="eyebrow" id="creditDialogCard"></div><h2 id="creditDialogTitle">Credit</h2></div><button value="cancel" class="icon-button">×</button></div>
+      <p id="creditDialogNote"></p>
+      <div id="creditDialogBody"></div>
+      <div class="dialog-actions"><button type="button" class="secondary-button" id="creditClearBtn">Clear</button><button type="submit" value="default" class="primary-button">Save</button></div>
+    </form>
+  </dialog>
 
   <dialog id="infoDialog">
     <div class="dialog-inner">
       <div class="dialog-title-row"><h2>About this guide</h2><button id="closeDialog" class="icon-button">×</button></div>
-      <p>This app ranks your Chase Sapphire Reserve, Sapphire Preferred, Freedom Flex, and Freedom Unlimited using the earning rates and Q4 2026 rotating categories built into this version.</p>
-      <p>For stores, the app uses a local merchant-to-category lookup. If a store is not recognized, search the purchase category instead.</p>
-      <p>No account data is stored or transmitted.</p>
+      <p>This app ranks Sapphire Reserve, Sapphire Preferred, Freedom Flex and Freedom Unlimited, and tracks selected Chase credits locally on your device.</p>
+      <p>Benefit definitions are configuration-driven in <code>app.js</code>. No Chase login, account data or card numbers are stored or transmitted.</p>
     </div>
   </dialog>
 
