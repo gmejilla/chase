@@ -5,6 +5,8 @@ const nowYear = today.getFullYear();
 
 const STUBHUB_ICON = `<img src="./assets/stubhub-logo.png" alt="StubHub" class="brand-mark stubhub-mark">`;
 
+const DOORDASH_ICON = `<img src="./assets/doordash-logo.png" alt="DoorDash" class="brand-mark doordash-mark">`;
+
 const cards = {
   reserve: { name:"Chase Sapphire Reserve", short:"Sapphire Reserve", className:"card-reserve", note:"Premium travel, travel protections, direct flights/hotels, Chase Travel and high-value credits." },
   preferred: { name:"Chase Sapphire Preferred", short:"Sapphire Preferred", className:"card-preferred", note:"Gas, streaming, online grocery, select travel and a $100 Chase Travel hotel credit." },
@@ -13,10 +15,10 @@ const cards = {
 };
 
 const benefits = [
-  { id:"reserve-dd-15", card:"reserve", icon:"🛍️", name:"DoorDash qualifying order", value:15, cadence:"monthly", tracker:"boolean", note:"$15 monthly promo on a qualifying DoorDash order." },
-  { id:"reserve-dd-10a", card:"reserve", icon:"🛍️", name:"DoorDash non-restaurant #1", value:10, cadence:"monthly", tracker:"boolean", note:"First $10 monthly non-restaurant DoorDash promo." },
-  { id:"reserve-dd-10b", card:"reserve", icon:"🛍️", name:"DoorDash non-restaurant #2", value:10, cadence:"monthly", tracker:"boolean", note:"Second $10 monthly non-restaurant DoorDash promo." },
-  { id:"preferred-dd-10", card:"preferred", icon:"🛍️", name:"DoorDash non-restaurant", value:10, cadence:"monthly", tracker:"boolean", note:"$10 monthly non-restaurant DoorDash promo with eligible DashPass." },
+  { id:"reserve-dd-15", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash qualifying order", value:15, cadence:"monthly", tracker:"boolean", note:"$15 monthly promo on a qualifying DoorDash order." },
+  { id:"reserve-dd-10a", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash non-restaurant #1", value:10, cadence:"monthly", tracker:"boolean", note:"First $10 monthly non-restaurant DoorDash promo." },
+  { id:"reserve-dd-10b", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash non-restaurant #2", value:10, cadence:"monthly", tracker:"boolean", note:"Second $10 monthly non-restaurant DoorDash promo." },
+  { id:"preferred-dd-10", card:"preferred", icon:DOORDASH_ICON, name:"DoorDash non-restaurant", value:10, cadence:"monthly", tracker:"boolean", note:"$10 monthly non-restaurant DoorDash promo with eligible DashPass." },
   { id:"reserve-edit-1", card:"reserve", icon:"🏨", name:"The Edit credit #1", value:250, cadence:"calendarYear", tracker:"amount", note:"First of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-edit-2", card:"reserve", icon:"🏨", name:"The Edit credit #2", value:250, cadence:"calendarYear", tracker:"amount", note:"Second of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-select-hotels", card:"reserve", icon:"🏨", name:"Select Chase Travel Hotels", value:250, cadence:"fixed", tracker:"amount", start:"2026-01-01", end:"2026-12-31", note:"2026 only. Prepaid 2+ night stays at eligible brands including IHG, Montage, Pendry, Omni, Virgin, Minor and Pan Pacific." },
@@ -29,7 +31,7 @@ const benefits = [
 ];
 
 const rules = [
-  { id:"doordash", icon:"🛍️", title:"DoorDash", aliases:["doordash","door dash"], winner:"reserve", reward:"Use credits first", why:"Unused monthly DoorDash credits can beat the normal points return.", alternative:"After credits are used, Q4 restaurant orders can favor Freedom Flex at 7% total.", benefitIds:["reserve-dd-15","reserve-dd-10a","reserve-dd-10b","preferred-dd-10"] },
+  { id:"doordash", icon:DOORDASH_ICON, title:"DoorDash", aliases:["doordash","door dash"], winner:"reserve", reward:"Use credits first", why:"Unused monthly DoorDash credits can beat the normal points return.", alternative:"After credits are used, Q4 restaurant orders can favor Freedom Flex at 7% total.", benefitIds:["reserve-dd-15","reserve-dd-10a","reserve-dd-10b","preferred-dd-10"] },
   { id:"stubhub", icon:STUBHUB_ICON, title:"StubHub / viagogo", aliases:["stubhub","stub hub","viagogo","tickets","event tickets","concert tickets"], winner:"reserve", reward:"Up to $150 credit", why:"Reserve provides up to $150 in StubHub/viagogo statement credits each half-year after activation.", alternative:"The benefit resets Jan 1 and Jul 1, for up to $300 per calendar year.", benefitIds:["reserve-stubhub"] },
   { id:"flights", icon:"✈️", title:"Flights", aliases:["flight","flights","airline","airfare","american airlines","aa","united airlines","delta","jetblue","southwest"], winner:"reserve", reward:"4x points", why:"Best for flights booked directly with the airline.", alternative:"Use Reserve through Chase Travel for 8x when portal pricing works for you.", benefitIds:["reserve-travel","targeted-chase-travel-100"] },
   { id:"ihg", icon:"🏨", title:"IHG / Select Hotels", aliases:["ihg","intercontinental","holiday inn","kimpton","crowne plaza","montage","pendry","omni","virgin hotel","minor hotel","pan pacific"], winner:"reserve", reward:"Up to $250 credit", why:"Eligible prepaid 2+ night Chase Travel stays can use the 2026 Select Chase Travel Hotels credit.", alternative:"If the property is also in The Edit, additional Reserve hotel value may apply.", benefitIds:["reserve-select-hotels","reserve-edit-1","reserve-edit-2","reserve-travel","targeted-chase-travel-100"] },

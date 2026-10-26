@@ -1,4 +1,4 @@
-const CACHE="chase-card-guide-v2-8";
+const CACHE="chase-card-guide-v2-7";
 const ASSETS=[
   "./",
   "./index.html",
@@ -11,7 +11,8 @@ const ASSETS=[
   "./assets/sapphire-preferred-card.png",
   "./assets/freedom-flex-card.png",
   "./assets/freedom-unlimited-card.png",
-  "./assets/stubhub-logo.png"
+  "./assets/stubhub-logo.png",
+  "./assets/doordash-logo.png"
 ];
 self.addEventListener("install",event=>{
   self.skipWaiting();

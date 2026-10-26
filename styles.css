@@ -41,3 +41,5 @@ dialog{color:var(--text);border:1px solid rgba(255,255,255,.12);border-radius:20
     min-height:190px;
   }
 }
+
+.doordash-mark{width:34px;object-fit:contain}.cat-icon .doordash-mark{width:34px}.credit-icon .doordash-mark{width:40px}.credit-hint .doordash-mark{width:28px;margin-right:6px}
