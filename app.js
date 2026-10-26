@@ -18,6 +18,7 @@ const benefits = [
   { id:"reserve-edit", card:"reserve", icon:"🏨", name:"The Edit hotel credits", value:500, cadence:"calendarYear", tracker:"amount", note:"Up to $500 annually; maximum $250 statement credit per qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-select-hotels", card:"reserve", icon:"🏨", name:"Select Chase Travel Hotels", value:250, cadence:"fixed", tracker:"amount", start:"2026-01-01", end:"2026-12-31", note:"2026 only. Prepaid 2+ night stays at eligible brands including IHG, Montage, Pendry, Omni, Virgin, Minor and Pan Pacific." },
   { id:"reserve-travel", card:"reserve", icon:"✈️", name:"$300 annual travel credit", value:300, cadence:"anniversary", tracker:"amount", resetSetting:"reserveResetDate", note:"Automatic statement credits on eligible travel purchases. Resets each account anniversary year." },
+  { id:"reserve-stubhub", card:"reserve", icon:"🎟️", name:"StubHub / viagogo credit", value:150, cadence:"halfYear", tracker:"amount", note:"Up to $150 in statement credits Jan–Jun and another $150 Jul–Dec, for up to $300 annually. Activation required. Available through Dec. 31, 2027." },
   { id:"preferred-hotel", card:"preferred", icon:"🏨", name:"$100 Chase Travel hotel credit", value:100, cadence:"anniversary", tracker:"amount", resetSetting:"preferredResetDate", note:"Up to $100 each account anniversary year on eligible hotel stays purchased through Chase Travel." },
   { id:"reserve-ttp", card:"reserve", icon:"🛂", name:"Global Entry / TSA PreCheck / NEXUS", value:120, cadence:"interval", tracker:"date", years:4, note:"Up to $120 for one eligible application fee every 4 years." },
   { id:"preferred-ttp", card:"preferred", icon:"🛂", name:"Global Entry / TSA PreCheck / NEXUS", value:120, cadence:"interval", tracker:"date", years:4, note:"Up to $120 for one eligible application fee every 4 years." },
@@ -26,6 +27,7 @@ const benefits = [
 
 const rules = [
   { id:"doordash", icon:"🛍️", title:"DoorDash", aliases:["doordash","door dash"], winner:"reserve", reward:"Use credits first", why:"Unused monthly DoorDash credits can beat the normal points return.", alternative:"After credits are used, Q4 restaurant orders can favor Freedom Flex at 7% total.", benefitIds:["reserve-dd-15","reserve-dd-10a","reserve-dd-10b","preferred-dd-10"] },
+  { id:"stubhub", icon:"🎟️", title:"StubHub / viagogo", aliases:["stubhub","stub hub","viagogo","tickets","event tickets","concert tickets"], winner:"reserve", reward:"Up to $150 credit", why:"Reserve provides up to $150 in StubHub/viagogo statement credits each half-year after activation.", alternative:"The benefit resets Jan 1 and Jul 1, for up to $300 per calendar year.", benefitIds:["reserve-stubhub"] },
   { id:"flights", icon:"✈️", title:"Flights", aliases:["flight","flights","airline","airfare","american airlines","aa","united airlines","delta","jetblue","southwest"], winner:"reserve", reward:"4x points", why:"Best for flights booked directly with the airline.", alternative:"Use Reserve through Chase Travel for 8x when portal pricing works for you.", benefitIds:["reserve-travel","targeted-chase-travel-100"] },
   { id:"ihg", icon:"🏨", title:"IHG / Select Hotels", aliases:["ihg","intercontinental","holiday inn","kimpton","crowne plaza","montage","pendry","omni","virgin hotel","minor hotel","pan pacific"], winner:"reserve", reward:"Up to $250 credit", why:"Eligible prepaid 2+ night Chase Travel stays can use the 2026 Select Chase Travel Hotels credit.", alternative:"If the property is also in The Edit, additional Reserve hotel value may apply.", benefitIds:["reserve-select-hotels","reserve-edit","reserve-travel","targeted-chase-travel-100"] },
   { id:"the-edit", icon:"👑", title:"The Edit", aliases:["the edit","edit hotel","edit hotels"], winner:"reserve", reward:"Up to $500 credit", why:"Reserve gets up to $500 annually for qualifying prepaid The Edit bookings, max $250 credit per transaction.", alternative:"Eligible stays also include The Edit on-property benefits such as a $100 property credit.", benefitIds:["reserve-edit","reserve-travel","targeted-chase-travel-100"] },
@@ -50,7 +52,7 @@ const rules = [
   { id:"general", icon:"🏷️", title:"All Other Purchases", aliases:["other","general","everything else","misc","miscellaneous","everyday purchase","non bonus"], winner:"unlimited", reward:"1.5%", why:"Freedom Unlimited gives you the highest baseline return on purchases that do not fit another bonus category.", alternative:"Avoid ordinary 1x purchases on Reserve, Preferred or Flex when Unlimited earns 1.5%." }
 ];
 
-const quickSearches = ["DoorDash","IHG","The Edit","Target","Costco","CVS","Restaurants","Groceries","Gas","Hotels"];
+const quickSearches = ["DoorDash","StubHub","IHG","The Edit","Target","Costco","CVS","Restaurants","Groceries","Gas","Hotels"];
 const defaultState = { version:APP_VERSION, settings:{
   reserveResetDate:"",
   preferredResetDate:"",
@@ -89,6 +91,7 @@ function anniversaryPeriod(resetDateString){
 function benefitPeriod(b){
   if(b.cadence==="monthly") return {key:monthKey(),start:new Date(today.getFullYear(),today.getMonth(),1,12),end:endOfMonth()};
   if(b.cadence==="calendarYear") return {key:String(today.getFullYear()),start:new Date(today.getFullYear(),0,1,12),end:new Date(today.getFullYear(),11,31,23,59,59)};
+  if(b.cadence==="halfYear"){ const first=today.getMonth()<6; const start=new Date(today.getFullYear(),first?0:6,1,12); const end=new Date(today.getFullYear(),first?5:11,first?30:31,23,59,59); return {key:`${today.getFullYear()}_${first?"H1":"H2"}`,start,end}; }
   if(b.cadence==="fixed" || b.cadence==="targeted") return {key:`fixed_${b.start || ""}_${isoDate(getFixedEnd(b)||today)}`,start:parseLocalDate(b.start)||new Date(2000,0,1),end:getFixedEnd(b)};
   if(b.cadence==="anniversary") return anniversaryPeriod(state.settings[b.resetSetting]) || {key:`unset_${today.getFullYear()}`,start:null,end:null};
   if(b.cadence==="interval") return {key:"interval",start:null,end:null};
@@ -111,7 +114,7 @@ function isActive(b){
 function remainingValue(b){ if(!isActive(b)) return 0; if(b.tracker==="date") return isIntervalEligible(b)?b.value:0; return Math.max(0,b.value-usedValue(b)); }
 function expirationDate(b){
   if(b.cadence==="monthly") return endOfMonth();
-  if(["fixed","targeted","calendarYear"].includes(b.cadence)) return benefitPeriod(b).end;
+  if(["fixed","targeted","calendarYear","halfYear"].includes(b.cadence)) return benefitPeriod(b).end;
   if(b.cadence==="anniversary") return benefitPeriod(b).end;
   return null;
 }
@@ -139,6 +142,7 @@ function periodLabel(b){
   const p=benefitPeriod(b);
   if(b.cadence==="monthly") return new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric"}).format(today);
   if(b.cadence==="calendarYear") return String(today.getFullYear());
+  if(b.cadence==="halfYear"){ const p=benefitPeriod(b); return `${fmtDate(p.start)} – ${fmtDate(p.end)}`; }
   if(b.cadence==="anniversary") return p.start ? `${fmtDate(p.start)} – ${fmtDate(p.end)}` : "Set reset date in Settings";
   if(b.cadence==="fixed"||b.cadence==="targeted") return p.end ? `Ends ${fmtDate(p.end)}` : "Set expiration date";
   if(b.cadence==="interval") return "Every 4 years";
