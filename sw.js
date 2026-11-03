@@ -1,4 +1,4 @@
-const CACHE="chase-card-guide-v2-16-renewal-labels";
+const CACHE="chase-card-guide-v2-17-all-unused-credits";
 const ASSETS=[
   "./",
   "./index.html",

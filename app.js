@@ -285,14 +285,10 @@ function creditRowHTML(b,showRenewal=false){
 function renderUrgentCredits(){
   const open=benefits.filter(benefitEnabled).filter(b=>remainingValue(b)>0)
     .sort((a,b)=>urgencyScore(a)-urgencyScore(b));
-  // Keep the current Sapphire Reserve dining credit visible in "Use these next",
-  // even when nearer-expiring monthly credits would otherwise fill all five slots.
-  const dining=open.find(b=>b.id==="reserve-dining-300");
-  const urgent=dining && !open.slice(0,5).includes(dining)
-    ? [...open.filter(b=>b!==dining).slice(0,4),dining]
-        .sort((a,b)=>urgencyScore(a)-urgencyScore(b))
-    : open.slice(0,5);
-  document.getElementById("urgentCredits").innerHTML=urgent.length?urgent.map(b=>creditRowHTML(b,true)).join(""):`<div class="empty-state">No open credits are currently tracked.</div>`;
+  // Show every active benefit with unused credit, not just the first five.
+  // The eligible Global Entry/TSA PreCheck benefits are included as date-tracked credits;
+  // used credits and expired/disabled offers are excluded by remainingValue().
+  document.getElementById("urgentCredits").innerHTML=open.length?open.map(b=>creditRowHTML(b,true)).join(""):`<div class="empty-state">No open credits are currently tracked.</div>`;
 }
 function renderCredits(){
   renderSummary(); renderUrgentCredits();
