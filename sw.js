@@ -1,4 +1,4 @@
-const CACHE="chase-card-guide-v2-12-icons";
+const CACHE="chase-card-guide-v2-14-title";
 const ASSETS=[
   "./",
   "./index.html",
