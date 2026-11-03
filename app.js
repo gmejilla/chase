@@ -264,11 +264,23 @@ function summaryData(){
 }
 function renderSummary(){ const s=summaryData(); document.getElementById("summaryGrid").innerHTML=`<div class="summary-card"><span>Available now</span><strong>${money(s.available)}</strong><small>across tracked credits</small></div><div class="summary-card"><span>Claimed in ${today.getFullYear()}</span><strong>${money(s.claimed)}</strong><small>saved locally</small></div><div class="summary-card warning"><span>Expiring ≤45 days</span><strong>${money(s.expiring)}</strong><small>prioritize these</small></div>`; document.getElementById("creditsYear").textContent=today.getFullYear(); }
 function progressPercent(b){ return Math.min(100,Math.round((usedValue(b)/b.value)*100)); }
-function creditRowHTML(b){
+function renewalLabel(b){
+  if(b.cadence==="monthly") return "Renews monthly";
+  if(b.cadence==="calendarYear") return "Renews January 1";
+  if(b.cadence==="halfYear") return "Renews January 1 & July 1";
+  if(b.cadence==="anniversary") return state.settings[b.resetSetting]
+    ? "Renews on account anniversary"
+    : "Account anniversary · Set date in Settings";
+  if(b.cadence==="interval") return `Eligible every ${b.years||4} years`;
+  if(b.cadence==="fixed") return "Limited-time credit · Does not renew";
+  if(b.cadence==="targeted") return "Targeted offer · Does not renew";
+  return "";
+}
+function creditRowHTML(b,showRenewal=false){
   const status=statusFor(b),used=usedValue(b),remaining=remainingValue(b),active=isActive(b);
   let valueLine=b.tracker==="date"?(usageRecord(b).date?`Last used ${fmtDate(parseLocalDate(usageRecord(b).date))}`:`${money(b.value)} available`):`${money(used)} used · ${money(remaining)} left`;
   if(!active && status.className==="expired") valueLine=`${money(used)} used · offer expired`;
-  return `<button class="credit-row" data-open-credit="${b.id}"><div class="credit-icon">${b.icon}</div><div class="credit-main"><div class="credit-title-line"><strong>${b.name}</strong><span class="status ${status.className}">${status.label}</span></div><div class="credit-card-name">${cards[b.card].short} · ${periodLabel(b)}</div><div class="credit-value-line">${valueLine}</div>${b.tracker!=="date"?`<div class="progress"><span style="width:${progressPercent(b)}%"></span></div>`:""}</div><div class="chevron">›</div></button>`;
+  return `<button class="credit-row" data-open-credit="${b.id}"><div class="credit-icon">${b.icon}</div><div class="credit-main"><div class="credit-title-line"><strong>${b.name}</strong><span class="status ${status.className}">${status.label}</span></div><div class="credit-card-name">${cards[b.card].short} · ${periodLabel(b)}</div>${showRenewal?`<div class="credit-renewal">${renewalLabel(b)}</div>`:""}<div class="credit-value-line">${valueLine}</div>${b.tracker!=="date"?`<div class="progress"><span style="width:${progressPercent(b)}%"></span></div>`:""}</div><div class="chevron">›</div></button>`;
 }
 function renderUrgentCredits(){
   const open=benefits.filter(benefitEnabled).filter(b=>remainingValue(b)>0)
@@ -280,7 +292,7 @@ function renderUrgentCredits(){
     ? [...open.filter(b=>b!==dining).slice(0,4),dining]
         .sort((a,b)=>urgencyScore(a)-urgencyScore(b))
     : open.slice(0,5);
-  document.getElementById("urgentCredits").innerHTML=urgent.length?urgent.map(creditRowHTML).join(""):`<div class="empty-state">No open credits are currently tracked.</div>`;
+  document.getElementById("urgentCredits").innerHTML=urgent.length?urgent.map(b=>creditRowHTML(b,true)).join(""):`<div class="empty-state">No open credits are currently tracked.</div>`;
 }
 function renderCredits(){
   renderSummary(); renderUrgentCredits();
