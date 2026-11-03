@@ -1,4 +1,4 @@
-const CACHE="chase-card-guide-v2-12";
+const CACHE="chase-card-guide-v2-12-icons";
 const ASSETS=[
   "./",
   "./index.html",
@@ -6,6 +6,9 @@ const ASSETS=[
   "./app.js",
   "./manifest.json",
   "./icons/icon-192.png",
+  "./icons/apple-touch-icon.png",
+  "./icons/chase-logo.svg",
+  "./favicon.ico",
   "./icons/icon-512.png",
   "./assets/sapphire-reserve-card.png",
   "./assets/sapphire-preferred-card.png",

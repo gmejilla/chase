@@ -74,3 +74,12 @@ This build was UI-tested at:
 - iPhone 15 Pro Max viewport: 430 × 932
 
 Validated flows include search/recommendations, Credits navigation, marking a monthly credit used, the targeted $100 Chase Travel Offer setting, and responsive layout behavior.
+
+### Sapphire Reserve dining credit
+- $300 annually at participating Sapphire Reserve Exclusive Tables restaurants only ($150 Jan–Jun and $150 Jul–Dec).
+- The Credits tracker records partial dollar usage separately for each half-year and preserves historical periods.
+- Search “Exclusive Tables” or “dining credit” for the eligible-card recommendation and a shortcut to the credit tracker. Regular dining is not automatically eligible.
+
+### iOS and browser icons
+
+The uploaded Chase logo SVG is used for the browser favicon and to generate iPhone Home Screen and PWA icons. The Add to Home Screen bookmark label is **Chase Card Guide**; the in-app header remains **Chase Card Guide v2**. On iOS, remove an existing Home Screen bookmark and re-add it to update a cached icon.
