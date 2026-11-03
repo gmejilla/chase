@@ -271,7 +271,15 @@ function creditRowHTML(b){
   return `<button class="credit-row" data-open-credit="${b.id}"><div class="credit-icon">${b.icon}</div><div class="credit-main"><div class="credit-title-line"><strong>${b.name}</strong><span class="status ${status.className}">${status.label}</span></div><div class="credit-card-name">${cards[b.card].short} · ${periodLabel(b)}</div><div class="credit-value-line">${valueLine}</div>${b.tracker!=="date"?`<div class="progress"><span style="width:${progressPercent(b)}%"></span></div>`:""}</div><div class="chevron">›</div></button>`;
 }
 function renderUrgentCredits(){
-  const urgent=benefits.filter(benefitEnabled).filter(b=>remainingValue(b)>0).sort((a,b)=>urgencyScore(a)-urgencyScore(b)).slice(0,5);
+  const open=benefits.filter(benefitEnabled).filter(b=>remainingValue(b)>0)
+    .sort((a,b)=>urgencyScore(a)-urgencyScore(b));
+  // Keep the current Sapphire Reserve dining credit visible in "Use these next",
+  // even when nearer-expiring monthly credits would otherwise fill all five slots.
+  const dining=open.find(b=>b.id==="reserve-dining-300");
+  const urgent=dining && !open.slice(0,5).includes(dining)
+    ? [...open.filter(b=>b!==dining).slice(0,4),dining]
+        .sort((a,b)=>urgencyScore(a)-urgencyScore(b))
+    : open.slice(0,5);
   document.getElementById("urgentCredits").innerHTML=urgent.length?urgent.map(creditRowHTML).join(""):`<div class="empty-state">No open credits are currently tracked.</div>`;
 }
 function renderCredits(){

@@ -1,4 +1,4 @@
-const CACHE="chase-card-guide-v2-14-title";
+const CACHE="chase-card-guide-v2-15-dining-priority";
 const ASSETS=[
   "./",
   "./index.html",
