@@ -83,3 +83,7 @@ Validated flows include search/recommendations, Credits navigation, marking a mo
 ### iOS and browser icons
 
 The uploaded Chase logo SVG is used for the browser favicon and to generate iPhone Home Screen and PWA icons. The Add to Home Screen bookmark label is **Chase Card Guide**; the in-app header remains **Chase Card Guide v2**. On iOS, remove an existing Home Screen bookmark and re-add it to update a cached icon.
+
+Update notes
+
+2026-11-04: Added Reserve Apple Music ($144 user-estimated value), Apple TV ($156 user-estimated value), and complimentary DashPass ($120 annual value) as single-activation membership trackers. Their estimated values are excluded from cash-credit summary totals, and do not automatically renew on January 1. Added Reserve Peloton membership credit as $10/month ($120/year) through December 31, 2027; activation required. All appear in Credits and Use these next while unused. These changes do not add GitHub cloud synchronization.

@@ -43,3 +43,17 @@ dialog{color:var(--text);border:1px solid rgba(255,255,255,.12);border-radius:20
 }
 
 .doordash-mark{width:34px;object-fit:contain}.cat-icon .doordash-mark{width:34px}.credit-icon .doordash-mark{width:40px}.credit-hint .doordash-mark{width:28px;margin-right:6px}
+
+/* Credit visibility controls; stored independently of credit usage. */
+.visibility-header{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.visibility-count{color:var(--muted);font-size:11px;white-space:nowrap}
+.visibility-list{border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.visibility-row{display:flex;align-items:center;gap:11px;padding:11px 12px;border-bottom:1px solid var(--line);cursor:pointer;min-height:56px}
+.visibility-row:last-child{border-bottom:0}
+.visibility-icon{display:flex;align-items:center;justify-content:center;width:30px;height:30px;flex:none;font-size:20px}
+.visibility-icon img{display:block;max-width:100%;max-height:28px;object-fit:contain}
+.visibility-name{flex:1;min-width:0;line-height:1.35}
+.visibility-name strong{display:block;font-size:12px;overflow-wrap:anywhere}
+.visibility-name small{display:block;font-size:10px;color:var(--muted);margin-top:3px}
+.visibility-row input{width:22px;height:22px;flex:none;accent-color:var(--blue);cursor:pointer}
+.visibility-show-all{width:100%;margin-top:12px}

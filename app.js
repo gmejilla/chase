@@ -19,6 +19,11 @@ const benefits = [
   { id:"reserve-dd-10a", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash Grocery #1", value:10, cadence:"monthly", tracker:"boolean", note:"First $10 monthly non-restaurant DoorDash promo." },
   { id:"reserve-dd-10b", card:"reserve", icon:DOORDASH_ICON, name:"DoorDash Grocery #2", value:10, cadence:"monthly", tracker:"boolean", note:"Second $10 monthly non-restaurant DoorDash promo." },
   { id:"preferred-dd-10", card:"preferred", icon:DOORDASH_ICON, name:"DoorDash non-restaurant", value:10, cadence:"monthly", tracker:"boolean", note:"$10 monthly non-restaurant DoorDash promo with eligible DashPass." },
+  // Complimentary subscription benefits are activation trackers, not cash statement credits.
+  { id:"reserve-apple-music", card:"reserve", icon:"🎵", name:"Apple Music Membership", value:144, cadence:"activation", tracker:"boolean", inKind:true, deadline:"2027-06-22", note:"Complimentary Apple Music via Sapphire Reserve after linking your Apple ID through Chase. $144 is your requested estimated annual value, not a cash statement credit. Chase currently advertises combined Apple subscriptions at a different annual valuation. Activate by June 22, 2027; the subscription has its own eligibility term." },
+  { id:"reserve-apple-tv", card:"reserve", icon:"📺", name:"Apple TV Membership", value:156, cadence:"activation", tracker:"boolean", inKind:true, deadline:"2027-06-22", note:"Complimentary Apple TV via Sapphire Reserve after linking your Apple ID through Chase. $156 is your requested estimated annual value, not a cash statement credit. Activate by June 22, 2027; the subscription has its own eligibility term." },
+  { id:"reserve-dashpass", card:"reserve", icon:DOORDASH_ICON, name:"Complimentary DashPass Membership", value:120, cadence:"activation", tracker:"boolean", inKind:true, deadline:"2029-12-31", note:"Complimentary DashPass membership (estimated $120 annual value), at least 12 months after activation. Activate through Chase/DoorDash by December 31, 2029. This is a membership benefit, not a statement credit or a yearly $120 cash allowance." },
+  { id:"reserve-peloton", card:"reserve", icon:"🚴", name:"Peloton Membership Credit", value:10, cadence:"monthly", end:"2027-12-31", tracker:"amount", note:"Up to $10 in monthly statement credits on eligible Peloton memberships ($120 annually), through December 31, 2027. Activation required. Track the actual statement credit received each month." },
   { id:"reserve-edit-1", card:"reserve", icon:"🏨", name:"The Edit credit #1", value:250, cadence:"calendarYear", tracker:"amount", note:"First of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-edit-2", card:"reserve", icon:"🏨", name:"The Edit credit #2", value:250, cadence:"calendarYear", tracker:"amount", note:"Second of two $250 The Edit statement-credit portions for the calendar year. Qualifying prepaid booking; 2-night minimum." },
   { id:"reserve-select-hotels", card:"reserve", icon:"🏨", name:"Select Chase Travel Hotels", value:250, cadence:"fixed", tracker:"amount", start:"2026-01-01", end:"2026-12-31", note:"2026 only. Prepaid 2+ night stays at eligible brands including IHG, Montage, Pendry, Omni, Virgin, Minor and Pan Pacific." },
@@ -46,7 +51,11 @@ const rules = [
   { id:"red-cross", icon:"♥", title:"American Red Cross", aliases:["red cross","american red cross","donation","charity donation"], winner:"flex", reward:"5%", why:"Q4 2026 rotating category for eligible American Red Cross donations.", alternative:"Counts toward the same $1,500 combined Q4 bonus cap." },
   { id:"drugstores", icon:"💊", title:"Drugstores", aliases:["drugstore","drugstores","pharmacy","cvs","walgreens","rite aid"], winner:"unlimited", reward:"3%", why:"Freedom Unlimited earns 3% at drugstores.", alternative:"Freedom Flex also earns 3% at drugstores; Unlimited is the default pick here." },
   { id:"gas", icon:"⛽", title:"Gas Stations", aliases:["gas","gas station","gas stations","fuel","shell","exxon","mobil","sunoco","wawa gas","bp","chevron","ev charging","electric vehicle charging"], winner:"preferred", reward:"3x points", why:"Preferred earns 3x at gas stations and EV charging.", alternative:"Freedom Unlimited earns 1.5% if the purchase does not code as gas." },
-  { id:"streaming", icon:"▶️", title:"Streaming Services", aliases:["streaming","youtube tv","youtube","netflix","hulu","disney plus","disney+","max","hbo max","paramount plus","paramount+","peacock","spotify","apple music","apple tv","apple tv+"], winner:"preferred", reward:"3x points", why:"Preferred earns 3x on eligible streaming services.", alternative:"Freedom Flex has Top Streaming Services as a Q1 2027 rotating category after activation." },
+  { id:"apple-music-membership", icon:"🎵", title:"Apple Music Membership", aliases:["apple music","apple music membership","complimentary apple music","apple music benefit"], winner:"reserve", reward:"Complimentary membership", why:"Sapphire Reserve offers an eligible complimentary Apple Music subscription after activation via Chase.", alternative:"This is a subscription benefit, not an annual cash credit.", benefitIds:["reserve-apple-music"] },
+  { id:"apple-tv-membership", icon:"📺", title:"Apple TV Membership", aliases:["apple tv","apple tv+","apple tv membership","complimentary apple tv","apple tv benefit"], winner:"reserve", reward:"Complimentary membership", why:"Sapphire Reserve offers an eligible complimentary Apple TV subscription after activation via Chase.", alternative:"This is a subscription benefit, not an annual cash credit.", benefitIds:["reserve-apple-tv"] },
+  { id:"dashpass-membership", icon:DOORDASH_ICON, title:"DashPass Membership", aliases:["dashpass","dash pass","dashpass membership"], winner:"reserve", reward:"Complimentary membership", why:"Sapphire Reserve includes an eligible complimentary DashPass membership upon activation.", alternative:"Track membership activation separately from monthly DoorDash promos.", benefitIds:["reserve-dashpass"] },
+  { id:"peloton-membership", icon:"🚴", title:"Peloton Membership", aliases:["peloton membership","peloton subscription","peloton app"], winner:"reserve", reward:"$10 monthly credit", why:"Sapphire Reserve offers up to $10 monthly in statement credits for eligible Peloton memberships after activation.", alternative:"The $120 annual figure consists of twelve separate $10 monthly credits.", benefitIds:["reserve-peloton"] },
+  { id:"streaming", icon:"▶️", title:"Streaming Services", aliases:["streaming","youtube tv","youtube","netflix","hulu","disney plus","disney+","max","hbo max","paramount plus","paramount+","peacock","spotify"], winner:"preferred", reward:"3x points", why:"Preferred earns 3x on eligible streaming services.", alternative:"Freedom Flex has Top Streaming Services as a Q1 2027 rotating category after activation." },
   { id:"online-grocery", icon:"🛍️", title:"Online Grocery", aliases:["online grocery","instacart","grocery delivery","freshdirect"], winner:"preferred", reward:"3x points", why:"Preferred earns 3x on eligible online grocery purchases.", alternative:"Target, Walmart and wholesale clubs are generally excluded from Preferred online grocery." },
   { id:"vacation-home", icon:"🏠", title:"Vacation Homes", aliases:["airbnb","vrbo","vacation home","vacation rental"], winner:"preferred", reward:"3x points", why:"Preferred earns 3x on eligible vacation-home purchases.", alternative:"Use Reserve for traditional direct hotel bookings at 4x." },
   { id:"lyft", icon:"🚕", title:"Lyft", aliases:["lyft","rideshare","ride share"], winner:"reserve", reward:"5x + $10 credit", why:"Reserve earns 5x total points on Lyft and includes a monthly in-app credit through 9/30/2027.", alternative:"Use the monthly credit before it expires." },
@@ -67,7 +76,7 @@ const defaultState = { version:APP_VERSION, settings:{
   preferredAnnualFeeDate:"",
   targetOfferEnabled:true,
   targetOfferEnd:"2026-12-31"
-}, usage:{} };
+}, usage:{}, hiddenCredits:[] };
 let state = loadState();
 let activeCreditFilter = "all";
 let editingBenefitId = null;
@@ -76,7 +85,7 @@ function loadState(){
   try {
     const raw=JSON.parse(localStorage.getItem(STORAGE_KEY));
     if(!(raw && raw.version===APP_VERSION)) return structuredClone(defaultState);
-    const next={...defaultState,...raw,settings:{...defaultState.settings,...raw.settings},usage:raw.usage||{}};
+    const next={...defaultState,...raw,settings:{...defaultState.settings,...raw.settings},usage:raw.usage||{},hiddenCredits:Array.isArray(raw.hiddenCredits)?raw.hiddenCredits.filter(id=>benefits.some(b=>b.id===id)):[]};
     // Migrate the legacy single $500 The Edit tracker into two $250 portions.
     if(next.usage["reserve-edit"]){
       for(const [period,record] of Object.entries(next.usage["reserve-edit"])){
@@ -93,6 +102,8 @@ function loadState(){
   } catch { return structuredClone(defaultState); }
 }
 function saveState(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(state)); }
+function creditVisible(b){ return !(state.hiddenCredits||[]).includes(b.id); }
+function trackedBenefitEnabled(b){ return benefitEnabled(b) && creditVisible(b); }
 function isoDate(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
 function parseLocalDate(s){ if(!s) return null; const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d,12); }
 function addYears(d,n){ const out=new Date(d); out.setFullYear(out.getFullYear()+n); return out; }
@@ -118,6 +129,7 @@ function benefitPeriod(b){
   if(b.cadence==="fixed" || b.cadence==="targeted") return {key:`fixed_${b.start || ""}_${isoDate(getFixedEnd(b)||today)}`,start:parseLocalDate(b.start)||new Date(2000,0,1),end:getFixedEnd(b)};
   if(b.cadence==="anniversary") return anniversaryPeriod(state.settings[b.resetSetting]) || {key:`unset_${today.getFullYear()}`,start:null,end:null};
   if(b.cadence==="interval") return {key:"interval",start:null,end:null};
+  if(b.cadence==="activation") return {key:"membership",start:null,end:null};
   return {key:"default",start:null,end:null};
 }
 function usageRecord(b){ const p=benefitPeriod(b); return state.usage[b.id]?.[p.key] || {}; }
@@ -132,11 +144,13 @@ function isIntervalEligible(b){ const r=usageRecord(b); if(!r.date) return true;
 function isActive(b){
   if(!benefitEnabled(b)) return false;
   if(b.cadence==="interval") return isIntervalEligible(b);
+  if(b.end && today>parseLocalDate(b.end)) return false;
   const p=benefitPeriod(b); if(p.start && today<p.start) return false; if(p.end && today>p.end) return false; return true;
 }
 function remainingValue(b){ if(!isActive(b)) return 0; if(b.tracker==="date") return isIntervalEligible(b)?b.value:0; return Math.max(0,b.value-usedValue(b)); }
 function expirationDate(b){
-  if(b.cadence==="monthly") return endOfMonth();
+  if(b.cadence==="monthly") return b.end && parseLocalDate(b.end)<endOfMonth() ? parseLocalDate(b.end) : endOfMonth();
+  if(b.cadence==="activation") return parseLocalDate(b.deadline);
   if(["fixed","targeted","calendarYear","halfYear"].includes(b.cadence)) return benefitPeriod(b).end;
   if(b.cadence==="anniversary") return benefitPeriod(b).end;
   return null;
@@ -149,12 +163,13 @@ function urgencyScore(b){
 function statusFor(b){
   if(!benefitEnabled(b)) return {label:"Not tracked",className:"muted"};
   const p=benefitPeriod(b);
-  if((b.cadence==="fixed"||b.cadence==="targeted") && p.end && today>p.end) return {label:"Expired",className:"expired"};
+  if((b.end && today>parseLocalDate(b.end)) || ((b.cadence==="fixed"||b.cadence==="targeted") && p.end && today>p.end)) return {label:"Expired",className:"expired"};
   if(b.tracker==="date"){
     const r=usageRecord(b); if(!r.date) return {label:"Available",className:"open"};
     const next=addYears(parseLocalDate(r.date),b.years||4);
     return today>=next ? {label:"Available again",className:"open"}:{label:`Next ${fmtDate(next)}`,className:"used"};
   }
+  if(b.cadence==="activation") return usageRecord(b).used ? {label:"Activated",className:"used"} : {label:"Activate",className:"open"};
   const used=usedValue(b), rem=remainingValue(b);
   if(used>=b.value) return {label:"Used",className:"used"};
   const days=urgencyScore(b);
@@ -169,6 +184,7 @@ function periodLabel(b){
   if(b.cadence==="anniversary") return p.start ? `${fmtDate(p.start)} – ${fmtDate(p.end)}` : "Set reset date in Settings";
   if(b.cadence==="fixed"||b.cadence==="targeted") return p.end ? `Ends ${fmtDate(p.end)}` : "Set expiration date";
   if(b.cadence==="interval") return "Every 4 years";
+  if(b.cadence==="activation") return `Activation deadline: ${fmtDate(parseLocalDate(b.deadline))}`;
   return "";
 }
 
@@ -190,24 +206,25 @@ function normalize(value){ return value.toLowerCase().trim().replace(/[^a-z0-9+&
 function scoreRule(rule,query){ const q=normalize(query); if(!q)return 0; let score=0; for(const alias of rule.aliases){const a=normalize(alias); if(q===a)score=Math.max(score,100); else if(a.startsWith(q))score=Math.max(score,80); else if(a.includes(q))score=Math.max(score,65); else if(q.includes(a))score=Math.max(score,60);} if(normalize(rule.title).includes(q))score=Math.max(score,70); return score; }
 function findBest(query){ const ranked=rules.map(rule=>({rule,score:scoreRule(rule,query)})).sort((a,b)=>b.score-a.score); return ranked[0].score>0?ranked[0].rule:rules.find(r=>r.id==="general"); }
 
-function relevantBenefits(rule){ return (rule.benefitIds||[]).map(id=>benefits.find(b=>b.id===id)).filter(Boolean).filter(benefitEnabled); }
+function relevantBenefits(rule){ return (rule.benefitIds||[]).map(id=>benefits.find(b=>b.id===id)).filter(Boolean).filter(trackedBenefitEnabled); }
 function creditHintHTML(rule){
   const items=relevantBenefits(rule).map(b=>({b,remaining:remainingValue(b),status:statusFor(b)})).filter(x=>x.remaining>0 || x.status.className==="soon").sort((a,b)=>urgencyScore(a.b)-urgencyScore(b.b));
   if(!items.length) return "";
-  return `<div class="credit-hints"><div class="credit-hints-title">Unused credits that may change the decision</div>${items.map(({b,remaining})=>`<button class="credit-hint" data-open-credit="${b.id}"><span>${b.icon} ${b.name}</span><strong>${money(remaining)} left</strong></button>`).join("")}</div>`;
+  return `<div class="credit-hints"><div class="credit-hints-title">Unused credits that may change the decision</div>${items.map(({b,remaining})=>`<button class="credit-hint" data-open-credit="${b.id}"><span>${b.icon} ${b.name}</span><strong>${b.inKind ? "Activate membership" : `${money(remaining)} left`}</strong></button>`).join("")}</div>`;
 }
 function dynamicRecommendation(rule){
   if(rule.id==="doordash"){
-    const reserveLeft=["reserve-dd-15","reserve-dd-10a","reserve-dd-10b"].map(id=>benefits.find(b=>b.id===id)).some(b=>remainingValue(b)>0);
-    const preferredLeft=remainingValue(benefits.find(b=>b.id==="preferred-dd-10"))>0;
+    const reserveLeft=["reserve-dd-15","reserve-dd-10a","reserve-dd-10b"].map(id=>benefits.find(b=>b.id===id)).some(b=>creditVisible(b) && remainingValue(b)>0);
+    const preferredBenefit=benefits.find(b=>b.id==="preferred-dd-10");
+    const preferredLeft=creditVisible(preferredBenefit) && remainingValue(preferredBenefit)>0;
     if(reserveLeft) return {...rule,winner:"reserve",reward:"Use Reserve credit",why:"You still have an unused Reserve DoorDash credit this month."};
     if(preferredLeft) return {...rule,winner:"preferred",reward:"Use Preferred credit",why:"Your Reserve DoorDash credits are used, but the Preferred monthly promo is still open."};
     return {...rule,winner:"flex",reward:"7% dining",why:"Your tracked DoorDash credits are used; Q4 restaurant orders can earn 7% total on Freedom Flex."};
   }
   if(rule.id==="global-entry"){
     const r=benefits.find(b=>b.id==="reserve-ttp"), p=benefits.find(b=>b.id==="preferred-ttp");
-    if(isIntervalEligible(r)) return {...rule,winner:"reserve",reward:"Up to $120",why:"Your tracked Reserve Trusted Traveler credit is available."};
-    if(isIntervalEligible(p)) return {...rule,winner:"preferred",reward:"Up to $120",why:"Your Reserve credit is not currently eligible, but your tracked Preferred credit is available."};
+    if(creditVisible(r) && isIntervalEligible(r)) return {...rule,winner:"reserve",reward:"Up to $120",why:"Your tracked Reserve Trusted Traveler credit is available."};
+    if(creditVisible(p) && isIntervalEligible(p)) return {...rule,winner:"preferred",reward:"Up to $120",why:"Your Reserve credit is not currently eligible, but your tracked Preferred credit is available."};
   }
   return rule;
 }
@@ -244,6 +261,7 @@ function showCardWinners(cardKey){ const wins=rules.filter(r=>dynamicRecommendat
 function claimedInYear(year){
   let total=0;
   for(const b of benefits){
+    if(b.inKind || !creditVisible(b)) continue;
     const buckets=state.usage[b.id]||{};
     for(const [key,r] of Object.entries(buckets)){
       const belongs=key.includes(String(year)) || (b.cadence==="interval" && r.date?.startsWith(String(year)));
@@ -256,16 +274,17 @@ function claimedInYear(year){
   return total;
 }
 function summaryData(){
-  const active=benefits.filter(benefitEnabled);
-  const available=active.reduce((s,b)=>s+remainingValue(b),0);
-  const expiring=active.filter(b=>remainingValue(b)>0 && urgencyScore(b)<=45).reduce((s,b)=>s+remainingValue(b),0);
+  const active=benefits.filter(trackedBenefitEnabled);
+  const available=active.filter(b=>!b.inKind).reduce((s,b)=>s+remainingValue(b),0);
+  const expiring=active.filter(b=>!b.inKind && remainingValue(b)>0 && urgencyScore(b)<=45).reduce((s,b)=>s+remainingValue(b),0);
   const claimed=claimedInYear(today.getFullYear());
   return {available,expiring,claimed};
 }
 function renderSummary(){ const s=summaryData(); document.getElementById("summaryGrid").innerHTML=`<div class="summary-card"><span>Available now</span><strong>${money(s.available)}</strong><small>across tracked credits</small></div><div class="summary-card"><span>Claimed in ${today.getFullYear()}</span><strong>${money(s.claimed)}</strong><small>saved locally</small></div><div class="summary-card warning"><span>Expiring ≤45 days</span><strong>${money(s.expiring)}</strong><small>prioritize these</small></div>`; document.getElementById("creditsYear").textContent=today.getFullYear(); }
 function progressPercent(b){ return Math.min(100,Math.round((usedValue(b)/b.value)*100)); }
 function renewalLabel(b){
-  if(b.cadence==="monthly") return "Renews monthly";
+  if(b.cadence==="monthly") return b.end ? `Renews monthly · Ends ${fmtDate(parseLocalDate(b.end))}` : "Renews monthly";
+  if(b.cadence==="activation") return "Complimentary membership · Activation required (not cash credit)";
   if(b.cadence==="calendarYear") return "Renews January 1";
   if(b.cadence==="halfYear") return "Renews January 1 & July 1";
   if(b.cadence==="anniversary") return state.settings[b.resetSetting]
@@ -279,11 +298,12 @@ function renewalLabel(b){
 function creditRowHTML(b,showRenewal=false){
   const status=statusFor(b),used=usedValue(b),remaining=remainingValue(b),active=isActive(b);
   let valueLine=b.tracker==="date"?(usageRecord(b).date?`Last used ${fmtDate(parseLocalDate(usageRecord(b).date))}`:`${money(b.value)} available`):`${money(used)} used · ${money(remaining)} left`;
+  if(b.inKind) valueLine=usageRecord(b).used ? `Activated · Estimated annual value ${money(b.value)}` : `Not yet activated · Estimated annual value ${money(b.value)}`;
   if(!active && status.className==="expired") valueLine=`${money(used)} used · offer expired`;
-  return `<button class="credit-row" data-open-credit="${b.id}"><div class="credit-icon">${b.icon}</div><div class="credit-main"><div class="credit-title-line"><strong>${b.name}</strong><span class="status ${status.className}">${status.label}</span></div><div class="credit-card-name">${cards[b.card].short} · ${periodLabel(b)}</div>${showRenewal?`<div class="credit-renewal">${renewalLabel(b)}</div>`:""}<div class="credit-value-line">${valueLine}</div>${b.tracker!=="date"?`<div class="progress"><span style="width:${progressPercent(b)}%"></span></div>`:""}</div><div class="chevron">›</div></button>`;
+  return `<button class="credit-row" data-open-credit="${b.id}"><div class="credit-icon">${b.icon}</div><div class="credit-main"><div class="credit-title-line"><strong>${b.name}</strong><span class="status ${status.className}">${status.label}</span></div><div class="credit-card-name">${cards[b.card].short} · ${periodLabel(b)}</div>${showRenewal?`<div class="credit-renewal">${renewalLabel(b)}</div>`:""}<div class="credit-value-line">${valueLine}</div>${b.tracker!=="date" && !b.inKind?`<div class="progress"><span style="width:${progressPercent(b)}%"></span></div>`:""}</div><div class="chevron">›</div></button>`;
 }
 function renderUrgentCredits(){
-  const open=benefits.filter(benefitEnabled).filter(b=>remainingValue(b)>0)
+  const open=benefits.filter(trackedBenefitEnabled).filter(b=>remainingValue(b)>0)
     .sort((a,b)=>urgencyScore(a)-urgencyScore(b));
   // Show every active benefit with unused credit, not just the first five.
   // The eligible Global Entry/TSA PreCheck benefits are included as date-tracked credits;
@@ -292,13 +312,13 @@ function renderUrgentCredits(){
 }
 function renderCredits(){
   renderSummary(); renderUrgentCredits();
-  const filtered=benefits.filter(benefitEnabled).filter(b=>activeCreditFilter==="all"||b.card===activeCreditFilter);
+  const filtered=benefits.filter(trackedBenefitEnabled).filter(b=>activeCreditFilter==="all"||b.card===activeCreditFilter);
   document.getElementById("creditsList").innerHTML=filtered.map(creditRowHTML).join("");
   renderHistory(); renderCategories();
 }
 function monthlyUsageFor(b,month){ const key=`${today.getFullYear()}-${String(month).padStart(2,"0")}`; const r=state.usage[b.id]?.[key]||{}; if(month>today.getMonth()+1) return "future"; return r.used?"used":"open"; }
 function renderHistory(){
-  const monthly=benefits.filter(b=>b.cadence==="monthly"), months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const monthly=benefits.filter(b=>b.cadence==="monthly" && creditVisible(b)), months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   document.getElementById("historyTable").innerHTML=`<thead><tr><th>Credit</th>${months.map(m=>`<th>${m}</th>`).join("")}</tr></thead><tbody>${monthly.map(b=>`<tr><td><div class="history-credit-name">${b.name}</div><span class="history-card-label ${b.card}">${cards[b.card].short}</span></td>${months.map((m,i)=>{const status=monthlyUsageFor(b,i+1);return `<td><span class="history-dot ${status}" title="${m}"></span></td>`}).join("")}</tr>`).join("")}</tbody>`;
 }
 
@@ -308,7 +328,7 @@ function openCreditDialog(id){
   document.getElementById("creditDialogTitle").textContent=b.name;
   document.getElementById("creditDialogNote").textContent=`${b.note} ${periodLabel(b)}`;
   const r=usageRecord(b), body=document.getElementById("creditDialogBody");
-  if(b.tracker==="boolean") body.innerHTML=`<label class="toggle-row modal-toggle"><span><strong>Mark this credit used</strong><small>${money(b.value)} for the current period</small></span><input type="checkbox" id="creditUsedInput" ${r.used?"checked":""}></label>`;
+  if(b.tracker==="boolean") body.innerHTML=`<label class="toggle-row modal-toggle"><span><strong>${b.inKind ? "Mark membership activated" : "Mark this credit used"}</strong><small>${b.inKind ? `${money(b.value)} estimated annual membership value (not a cash credit)` : `${money(b.value)} for the current period`}</small></span><input type="checkbox" id="creditUsedInput" ${r.used?"checked":""}></label>`;
   if(b.tracker==="amount") body.innerHTML=`<label class="field"><span>Amount used</span><div class="money-input"><span>$</span><input id="creditAmountInput" type="number" min="0" max="${b.value}" step="1" inputmode="decimal" value="${Number(r.amount)||0}"></div><small>Maximum tracked value: ${money(b.value)}</small></label><button type="button" class="secondary-button full-width" id="markFullBtn">Mark full ${money(b.value)} used</button>`;
   if(b.tracker==="date") body.innerHTML=`<label class="field"><span>Date the credit was last used</span><input id="creditDateInput" type="date" value="${r.date||""}"><small>Leave blank if this card's benefit has not been used in the last four years.</small></label>`;
   document.getElementById("creditDialog").showModal();
@@ -324,7 +344,21 @@ function saveCreditDialog(){
 }
 function clearCreditDialog(){ const b=benefits.find(x=>x.id===editingBenefitId); if(!b)return; const p=benefitPeriod(b); if(state.usage[b.id]) delete state.usage[b.id][p.key]; saveState(); renderCredits(); document.getElementById("creditDialog").close(); }
 
+function renderCreditVisibilitySettings(){
+  const list=document.getElementById("creditVisibilityList");
+  list.innerHTML=benefits.map(b=>`<label class="visibility-row"><span class="visibility-icon">${b.icon}</span><span class="visibility-name"><strong>${b.name}</strong><small>${cards[b.card].short}</small></span><input type="checkbox" data-credit-visibility="${b.id}" ${creditVisible(b)?"checked":""} aria-label="Show ${b.name} (${cards[b.card].short})"></label>`).join("");
+  const visible=benefits.filter(creditVisible).length;
+  document.getElementById("creditVisibilityCount").textContent=`${visible} of ${benefits.length} shown`;
+}
+function setCreditVisibility(id,visible){
+  if(!benefits.some(b=>b.id===id)) return;
+  const hidden=new Set(state.hiddenCredits||[]);
+  if(visible)hidden.delete(id); else hidden.add(id);
+  state.hiddenCredits=[...hidden];
+  saveState(); renderCreditVisibilitySettings(); renderCredits();
+}
 function syncSettingsUI(){
+  renderCreditVisibilitySettings();
   document.getElementById("reserveResetDate").value=state.settings.reserveResetDate||"";
   document.getElementById("preferredResetDate").value=state.settings.preferredResetDate||"";
   document.getElementById("reserveAnnualFeeDate").value=state.settings.reserveAnnualFeeDate||"";
@@ -342,7 +376,7 @@ function settingChanged(){
   saveState(); renderCredits(); renderCards();
 }
 function exportBackup(){ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob),a=document.createElement("a"); a.href=url; a.download=`chase-card-guide-backup-${isoDate(today)}.json`; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); }
-async function importBackup(file){ try{ const parsed=JSON.parse(await file.text()); if(parsed.version!==APP_VERSION) throw new Error("Unsupported backup version"); state={...defaultState,...parsed,settings:{...defaultState.settings,...parsed.settings},usage:parsed.usage||{}}; saveState(); syncSettingsUI(); renderCredits(); renderCards(); alert("Backup imported."); } catch(e){ alert("Could not import that backup file."); } }
+async function importBackup(file){ try{ const parsed=JSON.parse(await file.text()); if(parsed.version!==APP_VERSION) throw new Error("Unsupported backup version"); state={...defaultState,...parsed,settings:{...defaultState.settings,...parsed.settings},usage:parsed.usage||{},hiddenCredits:Array.isArray(parsed.hiddenCredits)?parsed.hiddenCredits.filter(id=>benefits.some(b=>b.id===id)):[]}; saveState(); syncSettingsUI(); renderCredits(); renderCards(); alert("Backup imported."); } catch(e){ alert("Could not import that backup file."); } }
 
 function switchTab(tab){ document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.dataset.view===tab)); document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab)); if(tab==="credits")renderCredits(); if(tab==="settings")syncSettingsUI(); window.scrollTo({top:0,behavior:"smooth"}); }
 
@@ -364,6 +398,13 @@ document.addEventListener("keydown",e=>{const row=e.target.closest?.("[data-rule
 document.getElementById("creditForm").addEventListener("submit",saveCreditDialog);
 document.getElementById("creditClearBtn").addEventListener("click",clearCreditDialog);
 ["reserveResetDate","preferredResetDate","reserveAnnualFeeDate","preferredAnnualFeeDate","targetOfferEnabled","targetOfferEnd"].forEach(id=>document.getElementById(id).addEventListener("change",settingChanged));
+document.getElementById("creditVisibilityList").addEventListener("change",e=>{
+  const input=e.target.closest("[data-credit-visibility]");
+  if(input)setCreditVisibility(input.dataset.creditVisibility,input.checked);
+});
+document.getElementById("showAllCreditsBtn").addEventListener("click",()=>{
+  state.hiddenCredits=[]; saveState(); renderCreditVisibilitySettings(); renderCredits();
+});
 document.getElementById("exportBtn").addEventListener("click",exportBackup);
 document.getElementById("importInput").addEventListener("change",e=>{if(e.target.files[0])importBackup(e.target.files[0]);e.target.value="";});
 document.getElementById("resetBtn").addEventListener("click",()=>{if(confirm("Reset all credit tracking and settings?")){state=structuredClone(defaultState);saveState();syncSettingsUI();renderCredits();renderCards();}});
