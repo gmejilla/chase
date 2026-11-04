@@ -1,4 +1,4 @@
-const CACHE="chase-card-guide-v2-19-credit-visibility";
+const CACHE="chase-card-guide-v2-20-preferred-dashpass-preferred-grocery-rename";
 const ASSETS=[
   "./",
   "./index.html",
